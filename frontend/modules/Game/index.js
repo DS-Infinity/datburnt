@@ -6,6 +6,7 @@ import { userState } from "../../utils/userAtom";
 import { useRouter } from "next/router";
 import WaitingRoom from "./waiting";
 import Roast from "./roast";
+import Voting from "./voting";
 let socket = null;
 
 const GameContent = () => {
@@ -58,7 +59,8 @@ const GameContent = () => {
       });
 
       socket.on("voting", (data) => {
-        console.log("Voting Time!");
+        setShowVoting(true);
+        setShowScores(false);
       });
     }
 
@@ -107,6 +109,8 @@ const GameContent = () => {
                   })
                 }
               />
+            ) : showVoting ? (
+              <Voting />
             ) : (
               <div></div>
             )

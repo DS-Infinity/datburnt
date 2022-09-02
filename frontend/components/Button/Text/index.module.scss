@@ -1,0 +1,29 @@
+.button {
+  transition: all 0.2s;
+  min-width: 100px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--primary);
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  transform: scale(1);
+  cursor: pointer;
+  align-items: center;
+  user-select: none;
+}
+
+.button:hover {
+  color: var(--primary-dark);
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button:disabled {
+  transition: all 0.2s;
+  color: var(--primary-light);
+  cursor: not-allowed;
+}

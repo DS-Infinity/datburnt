@@ -1,0 +1,70 @@
+.container {
+  width: 100vw;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 72vw;
+  margin-bottom: 8vh;
+}
+
+.landing__image {
+  margin-left: 32px;
+}
+
+.landing__title {
+  font-size: 56px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 48px;
+}
+
+.landing__description {
+  font-size: 24px;
+  font-weight: 600;
+  color: #bdbdbd;
+}
+
+.landing__button {
+  background: rgba($color: #ffffff, $alpha: 0.1);
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 20px 40px;
+  border: none;
+  transition: background 0.2s;
+  cursor: pointer;
+  &:hover {
+    background: rgba($color: #ffffff, $alpha: 0.2);
+  }
+}
+
+.landing__button__left {
+  margin-right: 32px;
+}
+
+.burnt {
+  background: -webkit-linear-gradient(0deg, #e5af23 0%, #f2411a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ice {
+  background: -webkit-linear-gradient(0deg, #a4b4ff 0%, #3f3cd8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.landing__left {
+  margin-right: 32px;
+}

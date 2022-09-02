@@ -1,0 +1,241 @@
+.popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.createTitle {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.createSubtitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #868686;
+}
+
+.createSetting {
+  margin-top: 28px;
+}
+
+.visibility {
+  background-color: rgba($color: #e93131, $alpha: 0.1);
+  width: min-content;
+  padding: 8px 0px;
+  font-size: 14px;
+  margin-top: 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  user-select: none;
+  span {
+    padding: 8px 40px;
+    &:hover {
+      cursor: pointer;
+    }
+    transition: all 0.1s;
+  }
+  .selected {
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+  }
+  .deselected {
+    // background: var(--primary);
+    color: var(--primary);
+    border-radius: 10px;
+  }
+}
+
+.categories {
+  margin: 16px 0px;
+  margin-bottom: 64px;
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  flex-direction: column;
+  .categoryLine {
+    display: flex;
+    margin-bottom: 10px;
+    div {
+      width: 100px;
+      padding: 16px;
+      flex-grow: 1;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+      border-radius: 10px;
+      &:nth-child(2) {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  }
+  // 0b50b8
+  .politics {
+    background: #0b50b8;
+  }
+  .sports {
+    background: #0bb850;
+  }
+  .celebs {
+    background: #ee2a2a;
+  }
+  .companies {
+    background: #ed9819;
+  }
+  .chats {
+    background: #d51de5;
+  }
+  .random {
+    background: #f412c3;
+  }
+}
+
+.sliderNum {
+  font-size: 14px;
+  font-weight: 700;
+  color: #868686;
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #4e4e4e;
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.create {
+  color: var(--primary);
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  justify-content: center;
+  span {
+    font-weight: 600;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+}
+
+.join {
+  display: flex;
+  height: 220px;
+}
+
+.codeRoom {
+  flex-grow: 2.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 14px;
+  margin-left: 16px;
+  // padding-left: 8%;
+  // padding-right: 8%;
+  input {
+    border: 3px solid #d9d9d9;
+    font-size: 16px;
+    color: #9e9e9e;
+    flex-grow: 0.5;
+    padding: 14px 20px 14px 32px;
+    transform: translateY(4px);
+    margin-right: 16px;
+    font-weight: 500;
+    border-radius: 14px;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.randomRoom {
+  margin-right: 16px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 14px;
+  background: white;
+}
+
+.publicTitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: #4e4e4e;
+  margin: 0;
+  margin-top: 48px;
+}
+
+.publicRooms {
+  margin-top: 16px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.room {
+  display: flex;
+  justify-content: space-between;
+  width: 16vw;
+  padding: 24px;
+  background: white;
+  border-radius: 14px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.roomInfo {
+  margin-top: 4px;
+  margin-right: 64px;
+  margin-bottom: 24px;
+}
+
+.roomCode {
+  color: #4e4e4e;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.roomPlayers {
+  margin-top: 8px;
+}
+
+.roomJoin {
+  color: var(--primary);
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 40px;
+  height: min-content;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba($color: #e93131, $alpha: 0.2);
+  &:hover {
+    background: rgba($color: #e93131, $alpha: 0.3);
+  }
+}

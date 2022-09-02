@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../../utils/userAtom";
 import { useRouter } from "next/router";
 import WaitingRoom from "./waiting";
+import Roast from "./roast";
 let socket = null;
 
 const GameContent = () => {
@@ -18,6 +19,7 @@ const GameContent = () => {
   const [players, setPlayers] = useState([]);
   const [details, setDetails] = useState({});
   const [currentRound, setCurrentRound] = useState(0);
+  const [roundDetails, setRoundDetails] = useState({});
   const [showVoting, setShowVoting] = useState(false);
   const [showScores, setShowScores] = useState(false);
 
@@ -49,6 +51,14 @@ const GameContent = () => {
 
       socket.on("next-round", (data) => {
         console.log(data);
+        setCurrentRound(data.round);
+        setRoundDetails(data.details);
+        setShowVoting(false);
+        setShowScores(false);
+      });
+
+      socket.on("voting", (data) => {
+        console.log("Voting Time!");
       });
     }
 
@@ -86,7 +96,20 @@ const GameContent = () => {
           {errorMsg ? (
             <div>{errorMsg}</div>
           ) : currentRound != 0 ? (
-            <div></div>
+            !showVoting && !showScores ? (
+              <Roast
+                details={roundDetails}
+                round={currentRound}
+                submitRoast={(roast) =>
+                  socket.emit("submit", {
+                    code: router.query.code,
+                    roast: roast,
+                  })
+                }
+              />
+            ) : (
+              <div></div>
+            )
           ) : (
             <WaitingRoom
               details={details}

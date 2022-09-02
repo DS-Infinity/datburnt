@@ -136,7 +136,25 @@ module.exports = (io) => {
       if (game.owner.toString() == socket.user._id.toString()) {
         console.log("request to start game", code);
         const round = getRound(game.categories, game.rounds);
+        const newGame = { ...game, started: true, currentRound: 1 };
+        updateGame(code, newGame);
         io.in(code).emit("next-round", { round: 1, details: round });
+      }
+    });
+
+    socket.on("submit", ({ code, roast }) => {
+      const game = findGame(code);
+      if (!game.rounds[game.currentRound]) {
+        game.rounds[game.currentRound] = [];
+      }
+      game.rounds[game.currentRound].push({
+        userid: socket.user._id.toString(),
+        roast,
+        votes: 0,
+      });
+      updateGame(code, game);
+      if (game.rounds[game.currentRound].length >= game.players.length) {
+        io.in(code).emit("voting", game.rounds[game.currentRound]);
       }
     });
   });

@@ -5,6 +5,8 @@
   justify-content: center;
   height: 100%;
   width: 100vw;
+  // background-color: #f0f;
+  margin-bottom: 120px;
   h1 {
     color: #4e4e4e;
     font-weight: 800;
@@ -55,17 +57,24 @@
   flex-direction: row;
   margin-top: 4vh;
   width: 80%;
+  flex-wrap: wrap;
+  overflow: scroll;
+  justify-content: center;
+  // background: #f0f;
+  // height: 100%;
 }
 
 .playerCard {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 14vw;
+  width: 30%;
+  min-width: 180px;
+  max-width: 240px;
   padding: 16px 24px 16px 24px;
   background-color: #ffffff;
   border-radius: 14px;
-  margin: 0 14px;
+  margin: 14px 14px;
 }
 
 .playerImage {

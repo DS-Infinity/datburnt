@@ -11,6 +11,7 @@ var State = (module.exports = {
       rounds: [],
       categories: ["Politics", "Sports", "Celebs"],
       votes: [],
+      prevQs: [],
     },
   ],
   setGames: function (newGames) {

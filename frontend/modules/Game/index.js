@@ -8,6 +8,7 @@ import WaitingRoom from "./waiting";
 import Roast from "./roast";
 import Voting from "./voting";
 import Score from "./score";
+import Results from "./result";
 let socket = null;
 
 const GameContent = () => {
@@ -26,6 +27,7 @@ const GameContent = () => {
   const [scores, setScores] = useState([]);
   const [showVoting, setShowVoting] = useState(false);
   const [showScores, setShowScores] = useState(false);
+  const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
     if (user && router.query.code) {
@@ -60,18 +62,27 @@ const GameContent = () => {
         setVoteCandidates([]);
         setShowVoting(false);
         setShowScores(false);
+        setShowResult(false);
       });
 
       socket.on("voting", (data) => {
         setShowVoting(true);
         setShowScores(false);
+        setShowResult(false);
         setVoteCandidates(data);
       });
 
       socket.on("score", (data) => {
         setShowVoting(false);
         setShowScores(true);
+        setShowResult(false);
         setScores(data);
+      });
+
+      socket.on("results", (data) => {
+        setShowResult(true);
+        setShowScores(false);
+        setShowVoting(false);
       });
     }
 
@@ -109,7 +120,7 @@ const GameContent = () => {
           {errorMsg ? (
             <div>{errorMsg}</div>
           ) : currentRound != 0 ? (
-            !showVoting && !showScores ? (
+            !showVoting && !showScores && !showResult ? (
               <Roast
                 details={roundDetails}
                 round={currentRound}
@@ -131,7 +142,16 @@ const GameContent = () => {
                 }}
               />
             ) : showScores ? (
-              <Score scores={scores} />
+              <Score
+                scores={scores}
+                owner={details.owner}
+                nextRound={() => {
+                  socket.emit("next-round", router.query.code);
+                }}
+                currentRound={details.currentRound}
+              />
+            ) : showResult ? (
+              <Results />
             ) : (
               <div></div>
             )

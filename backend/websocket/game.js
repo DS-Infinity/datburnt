@@ -138,8 +138,13 @@ module.exports = (io) => {
         game.owner.toString() == socket.user._id.toString() &&
         game.players.length >= 3
       ) {
-        const round = getRound(game.categories, game.rounds);
-        const newGame = { ...game, started: true, currentRound: 1 };
+        const round = getRound(game.categories, game.prevQs);
+        const newGame = {
+          ...game,
+          started: true,
+          currentRound: 1,
+          prevQs: [...game.prevQs, round],
+        };
         updateGame(code, newGame);
         io.in(code).emit("next-round", { round: 1, details: round });
       }
@@ -211,6 +216,30 @@ module.exports = (io) => {
         }
       }
     });
+
+    socket.on("next-round", (code) => {
+      const game = findGame(code);
+
+      if (game.owner === socket.user._id.toString()) {
+        const nextRound = game.currentRound + 1;
+
+        if (nextRound > 5) {
+          const winners = game.players.sort((a, b) => {
+            return -(a.score - b.score);
+          });
+          io.in(code).emit("results", winners);
+        } else {
+          const round = getRound(game.categories, game.prevQs);
+          const newGame = {
+            ...game,
+            started: true,
+            currentRound: nextRound,
+            prevQs: [...game.prevQs, round],
+          };
+          updateGame(code, newGame);
+          io.in(code).emit("next-round", { round: nextRound, details: round });
+        }
+      }
+    });
   });
 };
-

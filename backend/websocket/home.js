@@ -53,6 +53,7 @@ module.exports = (io) => {
         votes: [],
         code,
         owner: socket.user._id,
+        prevQs: [],
       };
 
       console.log(newGame);

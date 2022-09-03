@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import Loader from "../../components/Loader";
-import io from "socket.io-client";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/userAtom";
-import { useRouter } from "next/router";
-import WaitingRoom from "./waiting";
-import Roast from "./roast";
-import Voting from "./voting";
-import Score from "./score";
-import Results from "./result";
+import { useState, useEffect } from 'react';
+import Loader from '../../components/Loader';
+import io from 'socket.io-client';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userAtom';
+import { useRouter } from 'next/router';
+import WaitingRoom from './waiting';
+import Roast from './roast';
+import Voting from './voting';
+import Score from './score';
+import Results from './result';
 let socket = null;
 
 const GameContent = () => {
@@ -25,7 +25,6 @@ const GameContent = () => {
   const [roundDetails, setRoundDetails] = useState({});
   const [voteCandidates, setVoteCandidates] = useState([]);
   const [scores, setScores] = useState([]);
-  const [results, setResults] = useState([]);
   const [showVoting, setShowVoting] = useState(false);
   const [showScores, setShowScores] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -36,9 +35,9 @@ const GameContent = () => {
       socket = io(`${process.env.NEXT_PUBLIC_API_URL}/game`, {
         withCredentials: true,
       });
-      socket.emit("join-game", router.query.code);
+      socket.emit('join-game', router.query.code);
 
-      socket.on("game-details", (payload) => {
+      socket.on('game-details', (payload) => {
         if (!payload.success) {
           setLoading(false);
           setErrorMsg(payload.message);
@@ -51,13 +50,13 @@ const GameContent = () => {
         }
       });
 
-      socket.on("players", (players) => {
+      socket.on('players', (players) => {
         console.log(players);
         setPlayers(players);
       });
 
-      socket.on("next-round", (data) => {
-        console.log("next round");
+      socket.on('next-round', (data) => {
+        console.log('next round');
         setCurrentRound(data.round);
         setRoundDetails(data.details);
         setVoteCandidates([]);
@@ -66,37 +65,36 @@ const GameContent = () => {
         setShowResult(false);
       });
 
-      socket.on("voting", (data) => {
+      socket.on('voting', (data) => {
         setShowVoting(true);
         setShowScores(false);
         setShowResult(false);
         setVoteCandidates(data);
       });
 
-      socket.on("score", (data) => {
+      socket.on('score', (data) => {
         setShowVoting(false);
         setShowScores(true);
         setShowResult(false);
         setScores(data);
       });
 
-      socket.on("results", (data) => {
-        setResults(data);
+      socket.on('results', (data) => {
         setShowResult(true);
         setShowScores(false);
         setShowVoting(false);
       });
     }
 
-    window.addEventListener("beforeunload", (e) => {
+    window.addEventListener('beforeunload', (e) => {
       //e.preventDefault()
-      socket.emit("leave-game", router.query.code);
+      socket.emit('leave-game', router.query.code);
       socket?.disconnect();
     });
 
     return () => {
       if (router.query.code) {
-        socket.emit("leave-game", router.query.code);
+        socket.emit('leave-game', router.query.code);
         socket.disconnect();
       }
     };
@@ -110,15 +108,15 @@ const GameContent = () => {
       {loading || !socket ? (
         <div
           style={{
-            display: "flex",
-            height: "80vh",
-            width: "100%",
+            display: 'flex',
+            height: '80vh',
+            width: '100%',
           }}
         >
           <Loader center />
         </div>
       ) : (
-        <div style={{ width: "100%" }}>
+        <div style={{ width: '100%' }}>
           {errorMsg ? (
             <div>{errorMsg}</div>
           ) : currentRound != 0 ? (
@@ -127,7 +125,7 @@ const GameContent = () => {
                 details={roundDetails}
                 round={currentRound}
                 submitRoast={(roast) =>
-                  socket.emit("submit", {
+                  socket.emit('submit', {
                     code: router.query.code,
                     roast: roast,
                   })
@@ -135,9 +133,10 @@ const GameContent = () => {
               />
             ) : showVoting ? (
               <Voting
+                details={roundDetails}
                 voteCandidates={voteCandidates}
                 submitVote={(vote) => {
-                  socket.emit("vote", {
+                  socket.emit('vote', {
                     code: router.query.code,
                     vote: vote,
                   });
@@ -148,12 +147,12 @@ const GameContent = () => {
                 scores={scores}
                 owner={details.owner}
                 nextRound={() => {
-                  socket.emit("next-round", router.query.code);
+                  socket.emit('next-round', router.query.code);
                 }}
                 currentRound={details.currentRound}
               />
             ) : showResult ? (
-              <Results owner={details.owner} results={results} />
+              <Results />
             ) : (
               <div></div>
             )
@@ -161,7 +160,7 @@ const GameContent = () => {
             <WaitingRoom
               details={details}
               onStart={() => {
-                socket.emit("start", router.query.code);
+                socket.emit('start', router.query.code);
               }}
               players={players}
             />

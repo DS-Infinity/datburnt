@@ -1,5 +1,5 @@
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/userAtom";
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userAtom';
 
 const Score = ({ scores, owner, nextRound, currentRound }) => {
   const [user, setUser] = useRecoilState(userState);
@@ -18,8 +18,13 @@ const Score = ({ scores, owner, nextRound, currentRound }) => {
       </div>
       <div>
         {user._id === owner && (
-          <button onClick={() => nextRound()}>
-            {currentRound == 5 ? "View Results!" : "Next Round"}
+          <button
+            onClick={() => {
+              console.log('next round');
+              nextRound();
+            }}
+          >
+            {currentRound == 5 ? 'View Results!' : 'Next Round'}
           </button>
         )}
       </div>

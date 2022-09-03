@@ -1,0 +1,26 @@
+.main {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    color: #4e4e4e;
+    font-weight: 800;
+    font-size: 32px;
+  }
+  .description {
+    color: #4e4e4e;
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 4vh;
+  }
+}
+
+.ImageContainer {
+  img {
+    border-radius: 14px;
+    height: 40vh;
+  }
+}

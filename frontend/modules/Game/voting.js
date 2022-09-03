@@ -1,19 +1,20 @@
-import { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/userAtom";
+import { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userAtom';
+import styles from './voting.module.scss';
 
-const Voting = ({ voteCandidates, submitVote }) => {
+const Voting = ({ details, voteCandidates, submitVote }) => {
   const [candidates, setCandidates] = useState([]);
   const [user, setUser] = useRecoilState(userState);
 
   const [startCountdown, setStartCountdown] = useState(false);
   const [voted, setVoted] = useState(false);
-  const [vote, setVote] = useState("");
+  const [vote, setVote] = useState('');
 
   useEffect(() => {
     const c = [];
     voteCandidates.forEach((can) => {
-      if (can.roast.replaceAll(" ", "").length > 0 && can.userid != user._id) {
+      if (can.roast.replaceAll(' ', '').length > 0 && can.userid != user._id) {
         c.push(can);
       }
     });
@@ -22,7 +23,7 @@ const Voting = ({ voteCandidates, submitVote }) => {
       if (!voted) {
         setTimeout(() => {
           if (!voted) {
-            submitVote("NEO");
+            submitVote('NEO');
           }
           setVoted(true);
           // clearInterval(interval);
@@ -35,7 +36,7 @@ const Voting = ({ voteCandidates, submitVote }) => {
     }
   }, [voteCandidates]);
 
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(3000);
 
   useEffect(() => {
     if (startCountdown) {
@@ -45,7 +46,7 @@ const Voting = ({ voteCandidates, submitVote }) => {
           if (!voted) {
             //   setSubmitted(true);
             const interval2 = setInterval(() => {
-              submitVote("");
+              submitVote('');
               clearInterval(interval2);
             }, 2000);
           }
@@ -60,33 +61,43 @@ const Voting = ({ voteCandidates, submitVote }) => {
   }, [countdown, startCountdown]);
 
   return (
-    <div>
-      Voting{" "}
-      <div>
-        {candidates.length < 2 ? (
-          <div>Not enough people submitted a roast :(</div>
-        ) : (
-          candidates.map((candidate) => {
-            return (
-              <div
-                key={candidate.userid}
-                style={{
-                  background: candidate.userid === vote ? "#f00" : "#fff",
-                }}
-                onClick={() => {
-                  if (!voted) {
-                    setVoted(true);
-                    setVote(candidate.userid);
-                    submitVote(candidate.userid);
-                  }
-                }}
-              >
-                {candidate.roast}
-              </div>
-            );
-          })
-        )}
+    <div className={styles.main}>
+      <h1>Voting</h1>
+      <div className={styles.description}>
+        Vote for the roast you think would have hurt the most!
       </div>
+      <div>
+        <div className={styles.ImageContainer}>
+          <img src={details.image} />
+          <span>Category: {details.category}</span>
+        </div>
+        <div>
+          {candidates.length < 2 ? (
+            <div>Not enough people submitted a roast :(</div>
+          ) : (
+            candidates.map((candidate) => {
+              return (
+                <div
+                  key={candidate.userid}
+                  style={{
+                    background: candidate.userid === vote ? '#f00' : '#fff',
+                  }}
+                  onClick={() => {
+                    if (!voted) {
+                      setVoted(true);
+                      setVote(candidate.userid);
+                      submitVote(candidate.userid);
+                    }
+                  }}
+                >
+                  {candidate.roast}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+      <div></div>
       <div>{countdown}</div>
     </div>
   );

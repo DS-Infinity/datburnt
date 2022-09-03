@@ -60,15 +60,18 @@ module.exports = (io) => {
       if (code) {
         console.log('Leaving from ', code);
         const game = findGame(code);
-        const index = game.players.findIndex(
-          (p) => p.id === socket.user._id.toString() && p.socketId === socket.id
-        );
+        if (game) {
+          const index = game.players.findIndex(
+            (p) =>
+              p.id === socket.user._id.toString() && p.socketId === socket.id
+          );
 
-        if (index >= 0) {
-          game.players.splice(index, 1);
-          updateGame(code, game);
-          state.setSockets({ ...state.sockets, [socket.id]: null });
-          io.in(code).emit('players', game.players);
+          if (index >= 0) {
+            game.players.splice(index, 1);
+            updateGame(code, game);
+            state.setSockets({ ...state.sockets, [socket.id]: null });
+            io.in(code).emit("players", game.players);
+          }
         }
       }
       socket.removeAllListeners();
@@ -242,6 +245,15 @@ module.exports = (io) => {
           io.in(code).emit('next-round', { round: nextRound, details: round });
         }
       }
+    });
+
+    socket.on("end", (code) => {
+      const gameIndex = state.games.findIndex((g) => g.code === code);
+      const gs = [...state.games];
+      gs.splice(gameIndex, 1);
+      state.setGames(gs);
+      state.setSockets({ ...state.sockets, [socket.id]: null });
+      io.in(code).emit("end");
     });
   });
 };

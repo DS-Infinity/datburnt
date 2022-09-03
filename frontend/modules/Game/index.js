@@ -84,6 +84,10 @@ const GameContent = () => {
         setShowScores(false);
         setShowVoting(false);
       });
+
+      socket.on("end", () => {
+        router.push("/home");
+      });
     }
 
     window.addEventListener('beforeunload', (e) => {
@@ -152,7 +156,11 @@ const GameContent = () => {
                 currentRound={details.currentRound}
               />
             ) : showResult ? (
-              <Results />
+              <Results
+                owner={details.owner}
+                results={results}
+                endGame={() => socket.emit("end", router.query.code)}
+              />
             ) : (
               <div></div>
             )

@@ -145,7 +145,7 @@ module.exports = (io) => {
         const newGame = {
           ...game,
           started: true,
-          currentRound: 5,
+          currentRound: 1,
           prevQs: [...game.prevQs, round],
         };
         updateGame(code, newGame);

@@ -21,6 +21,7 @@ const GameContent = () => {
   const [details, setDetails] = useState({});
   const [currentRound, setCurrentRound] = useState(0);
   const [roundDetails, setRoundDetails] = useState({});
+  const [voteCandidates, setVoteCandidates] = useState([]);
   const [showVoting, setShowVoting] = useState(false);
   const [showScores, setShowScores] = useState(false);
 
@@ -54,6 +55,7 @@ const GameContent = () => {
         console.log(data);
         setCurrentRound(data.round);
         setRoundDetails(data.details);
+        setVoteCandidates([]);
         setShowVoting(false);
         setShowScores(false);
       });
@@ -61,6 +63,7 @@ const GameContent = () => {
       socket.on("voting", (data) => {
         setShowVoting(true);
         setShowScores(false);
+        setVoteCandidates(data);
       });
     }
 
@@ -88,13 +91,13 @@ const GameContent = () => {
           style={{
             display: "flex",
             height: "80vh",
-            width: "100vw",
+            width: "100%",
           }}
         >
           <Loader center />
         </div>
       ) : (
-        <div>
+        <div style={{ width: "100%" }}>
           {errorMsg ? (
             <div>{errorMsg}</div>
           ) : currentRound != 0 ? (
@@ -110,7 +113,7 @@ const GameContent = () => {
                 }
               />
             ) : showVoting ? (
-              <Voting />
+              <Voting voteCandidates={voteCandidates} />
             ) : (
               <div></div>
             )

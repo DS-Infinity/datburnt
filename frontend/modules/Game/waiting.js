@@ -82,8 +82,16 @@ const WaitingRoom = ({ details, players, onStart }) => {
       <div className={styles.bottom}>
         Hurry up bro
         <div>
+          {players.length < 3 && (
+            <p>
+              You need {3 - players.length} player
+              {3 - players.length == 1 ? "" : "s"} more to start the game
+            </p>
+          )}
           {details.owner === user._id && (
-            <button onClick={onStart}>Start</button>
+            <button onClick={onStart} disabled={players.length < 3}>
+              Start
+            </button>
           )}
         </div>
       </div>

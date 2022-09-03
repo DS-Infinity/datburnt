@@ -50,6 +50,7 @@ module.exports = (io) => {
         started: false,
         currentRound: 0,
         rounds: [],
+        votes: [],
         code,
         owner: socket.user._id,
       };

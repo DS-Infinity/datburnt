@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import WaitingRoom from "./waiting";
 import Roast from "./roast";
 import Voting from "./voting";
+import Score from "./score";
 let socket = null;
 
 const GameContent = () => {
@@ -22,6 +23,7 @@ const GameContent = () => {
   const [currentRound, setCurrentRound] = useState(0);
   const [roundDetails, setRoundDetails] = useState({});
   const [voteCandidates, setVoteCandidates] = useState([]);
+  const [scores, setScores] = useState([]);
   const [showVoting, setShowVoting] = useState(false);
   const [showScores, setShowScores] = useState(false);
 
@@ -64,6 +66,12 @@ const GameContent = () => {
         setShowVoting(true);
         setShowScores(false);
         setVoteCandidates(data);
+      });
+
+      socket.on("score", (data) => {
+        setShowVoting(false);
+        setShowScores(true);
+        setScores(data);
       });
     }
 
@@ -113,7 +121,17 @@ const GameContent = () => {
                 }
               />
             ) : showVoting ? (
-              <Voting voteCandidates={voteCandidates} />
+              <Voting
+                voteCandidates={voteCandidates}
+                submitVote={(vote) => {
+                  socket.emit("vote", {
+                    code: router.query.code,
+                    vote: vote,
+                  });
+                }}
+              />
+            ) : showScores ? (
+              <Score scores={scores} />
             ) : (
               <div></div>
             )

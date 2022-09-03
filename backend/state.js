@@ -10,6 +10,7 @@ var State = (module.exports = {
       players: [],
       rounds: [],
       categories: ["Politics", "Sports", "Celebs"],
+      votes: [],
     },
   ],
   setGames: function (newGames) {

@@ -26,6 +26,7 @@ const gameSocket = require("./game");
             }
         ]
     ],
+    votes: [[voter: "userid", vote: "userid"]]
     categories: ["politics", "sports", "celebs"]
 */
 

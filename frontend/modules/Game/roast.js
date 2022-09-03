@@ -9,11 +9,13 @@ const Roast = ({ round, details, submitRoast }) => {
     const interval = setInterval(() => {
       if (countdown <= 0) {
         clearInterval(interval);
-        setSubmitted(true);
-        const interval2 = setInterval(() => {
-          submitRoast("");
-          clearInterval(interval2);
-        }, 2000);
+        if (!submitted) {
+          //   setSubmitted(true);
+          const interval2 = setInterval(() => {
+            submitRoast("");
+            clearInterval(interval2);
+          }, 2000);
+        }
       } else {
         setCountdown(countdown - 1);
         clearInterval(interval);
@@ -26,7 +28,7 @@ const Roast = ({ round, details, submitRoast }) => {
   return (
     <div>
       <p>Round {round}</p> <img src={details.image} />
-      {countdown <= 0 ? (
+      {countdown <= 0 && !submitted ? (
         <p>Time's Up!</p>
       ) : submitted ? (
         <p>I bet that one hurt!</p>

@@ -147,14 +147,21 @@ module.exports = (io) => {
       if (!game.rounds[game.currentRound]) {
         game.rounds[game.currentRound] = [];
       }
-      game.rounds[game.currentRound].push({
-        userid: socket.user._id.toString(),
-        roast,
-        votes: 0,
-      });
-      updateGame(code, game);
-      if (game.rounds[game.currentRound].length >= game.players.length) {
-        io.in(code).emit("voting", game.rounds[game.currentRound]);
+
+      const hasSubmitted = game.rounds[game.currentRound].find(
+        (sub) => sub.userid === socket.user._id.toString()
+      );
+
+      if (!hasSubmitted) {
+        game.rounds[game.currentRound].push({
+          userid: socket.user._id.toString(),
+          roast,
+          votes: 0,
+        });
+        updateGame(code, game);
+        if (game.rounds[game.currentRound].length >= game.players.length) {
+          io.in(code).emit("voting", game.rounds[game.currentRound]);
+        }
       }
     });
   });

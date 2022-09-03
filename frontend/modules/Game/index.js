@@ -56,7 +56,7 @@ const GameContent = () => {
       });
 
       socket.on("next-round", (data) => {
-        console.log(data);
+        console.log("next round");
         setCurrentRound(data.round);
         setRoundDetails(data.details);
         setVoteCandidates([]);

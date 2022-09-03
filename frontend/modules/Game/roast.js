@@ -61,8 +61,8 @@ const RoastForm = ({ round, details, submitRoast }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (countdown == 0) {
-        stopTicking();
-        playOof();
+        // stopTicking();
+        // playOof();
         clearInterval(interval);
         if (!submitted) {
           //   setSubmitted(true);
@@ -76,6 +76,11 @@ const RoastForm = ({ round, details, submitRoast }) => {
         if (countdown == 11) {
           playTicking();
           // ticking.play();
+        }
+
+        if (countdown == 1) {
+          stopTicking();
+          playOof();
         }
         setCountdown(countdown - 1);
         clearInterval(interval);
@@ -137,19 +142,18 @@ const RoastForm = ({ round, details, submitRoast }) => {
             <span>Hurry Up Bruv! People are submitting!</span>
           )}
         </div>
-        {countdown <= 0 && !submitted ? null : submitted ? null : (
-          <div className={styles.timer}>
-            <CountdownCircleTimer
-              size={84}
-              isPlaying
-              duration={30}
-              colors={"#E93131"}
-              strokeWidth={8}
-            >
-              {({ remainingTime }) => remainingTime}
-            </CountdownCircleTimer>
-          </div>
-        )}
+        <div className={styles.timer}>
+          <CountdownCircleTimer
+            size={84}
+            isPlaying
+            duration={30}
+            rea
+            colors={"#E93131"}
+            strokeWidth={8}
+          >
+            {({ remainingTime }) => countdown}
+          </CountdownCircleTimer>
+        </div>
       </div>
     </div>
   );

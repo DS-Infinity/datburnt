@@ -16,6 +16,7 @@ export default function Content() {
   const router = useRouter();
 
   const popupRef = useState();
+  const popupRef2 = useState();
   const [visibility, setVisibility] = useState('public');
   const [playerNumber, setPlayerNumber] = useState(3);
   const [categories, setCategories] = useState([
@@ -28,11 +29,13 @@ export default function Content() {
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useRecoilState(userState);
   const [popupState, setPopupState] = useState(false);
+  const [popupState2, setPopupState2] = useState(false);
 
   const [games, setGames] = useState([]);
 
   useOnClickOutside(popupRef, () => {
     setPopupState(false);
+    setPopupState2(false);
   });
 
   // useEffect(() => {
@@ -114,6 +117,15 @@ export default function Content() {
               <div className={styles.codeRoom}>
                 <input placeholder='Enter Code' />
                 <PrimaryButton>Join</PrimaryButton>
+              </div>
+            </div>
+            <div className={styles.friendsTitle}>Friends</div>
+            <div className={styles.friends}>
+              <div
+                className={styles.addFriend}
+                onClick={() => setPopupState2(true)}
+              >
+                add frand
               </div>
             </div>
             <div className={styles.publicTitle}>Public Rooms</div>
@@ -344,6 +356,9 @@ export default function Content() {
             >
               Create Game
             </PrimaryButton>
+          </Popup>
+          <Popup popupState={popupState2} ref={popupRef2} center>
+            ANOTHER POPUP BITCH
           </Popup>
         </div>
       )}

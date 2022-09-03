@@ -9,7 +9,7 @@ const Game = () => {
         page={{
           title: "Game",
         }}
-        showNav={false}
+        showNav={true}
       >
         <Content />
       </Layout>

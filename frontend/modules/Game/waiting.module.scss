@@ -1,0 +1,178 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100vw;
+  h1 {
+    color: #4e4e4e;
+    font-weight: 800;
+    font-size: 40px;
+    margin: 0;
+    margin-top: 5vh;
+    margin-bottom: 4vh;
+  }
+}
+
+.card {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 28px 20px 28px;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 14px;
+}
+
+.cardTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cardBottom {
+  display: flex;
+  flex-direction: row;
+  // align-items: center;
+  margin-top: 32px;
+  width: 100%;
+}
+
+.categories {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // justify-content: center;
+  flex-wrap: wrap;
+}
+
+.players {
+  display: flex;
+  flex-direction: row;
+  margin-top: 4vh;
+  width: 80%;
+}
+
+.playerCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 14vw;
+  padding: 16px 24px 16px 24px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  margin: 0 14px;
+}
+
+.playerImage {
+  // width: 50px;
+  // height: 50px;
+  border-radius: 50%;
+}
+
+.playerImageContainer {
+  margin-right: 20px;
+  // width: 50px;
+  // height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  border: 5px solid var(--primary);
+  justify-content: center;
+}
+
+.playerName {
+  font-weight: 800;
+  font-size: 20px;
+  color: #2e2e2e;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.info {
+  color: #7a7a7a;
+  font-weight: 700;
+  font-size: 20px;
+  align-self: center;
+  &:first-child {
+    align-self: flex-start;
+    text-align: left;
+  }
+  text-align: center;
+  span {
+    color: #414141;
+  }
+}
+
+.visibility {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 20px;
+  text-align: right;
+}
+
+.category {
+  padding: 10px 20px;
+  width: 80px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a69c82c;
+  color: #2a69c8;
+  margin-right: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+.infoCategory {
+  margin-right: 20px;
+  color: #7a7a7a;
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: 4px;
+}
+
+.politics {
+  background: #0b50b826;
+  color: #0b50b8;
+}
+.sports {
+  background: #0bb85026;
+  color: #0bb850;
+}
+.celebs {
+  background: #ee2a2a26;
+  color: #ee2a2a;
+}
+.companies {
+  background: #ed981926;
+  color: #ed9819;
+}
+.chats {
+  background: #d51de526;
+  color: #d51de5;
+}
+.random {
+  background: #f412c326;
+  color: #f412c3;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-self: flex-end;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-top: 32px;
+  height: 100px;
+  background: white;
+}

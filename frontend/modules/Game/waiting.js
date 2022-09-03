@@ -1,7 +1,8 @@
-import Image from "next/image";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/userAtom";
-import styles from "./waiting.module.scss";
+import Image from 'next/image';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userAtom';
+import styles from './waiting.module.scss';
+import PrimaryButton from '../../components/Button/Primary';
 
 const WaitingRoom = ({ details, players, onStart }) => {
   const [user, setUser] = useRecoilState(userState);
@@ -29,7 +30,7 @@ const WaitingRoom = ({ details, players, onStart }) => {
             Maximum Players: <span>{details.maxPlayers}</span>
           </div>
           <div className={styles.visibility}>
-            {details.private ? "Private" : `⠀⠀⠀⠀⠀⠀⠀Public`}
+            {details.private ? '⠀⠀⠀⠀⠀⠀Private' : `⠀⠀⠀⠀⠀⠀⠀Public`}
           </div>
         </div>
         <div className={styles.cardBottom}>
@@ -40,19 +41,19 @@ const WaitingRoom = ({ details, players, onStart }) => {
                 <div
                   key={category}
                   className={`${styles.category} ${
-                    category === "Politics"
+                    category === 'Politics'
                       ? styles.politics
-                      : category === "Sports"
+                      : category === 'Sports'
                       ? styles.sports
-                      : category === "Celebs"
+                      : category === 'Celebs'
                       ? styles.celebs
-                      : category === "Companies"
+                      : category === 'Companies'
                       ? styles.companies
-                      : category === "Chats"
+                      : category === 'Chats'
                       ? styles.chats
-                      : category === "Random"
+                      : category === 'Random'
                       ? styles.random
-                      : ""
+                      : ''
                   }`}
                 >
                   {category}
@@ -80,18 +81,20 @@ const WaitingRoom = ({ details, players, onStart }) => {
         })}
       </div>
       <div className={styles.bottom}>
-        Hurry up bro
-        <div>
+        <div className={styles.gameCode}>
+          Game Code:⠀<span>{details.code}</span>
+        </div>
+        <div className={styles.bottomRight}>
           {players.length < 3 && (
-            <p>
+            <div className={styles.playersNeeded}>
               You need {3 - players.length} player
-              {3 - players.length == 1 ? "" : "s"} more to start the game
-            </p>
+              {3 - players.length == 1 ? '' : 's'} more to start the game
+            </div>
           )}
           {details.owner === user._id && (
-            <button onClick={onStart} disabled={players.length < 3}>
-              Start
-            </button>
+            <PrimaryButton onClick={onStart} disabled={players.length < 3}>
+              Start Game
+            </PrimaryButton>
           )}
         </div>
       </div>

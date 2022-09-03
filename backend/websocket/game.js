@@ -133,7 +133,10 @@ module.exports = (io) => {
 
     socket.on("start", (code) => {
       const game = findGame(code);
-      if (game.owner.toString() == socket.user._id.toString()) {
+      if (
+        game.owner.toString() == socket.user._id.toString() &&
+        game.players.length >= 3
+      ) {
         console.log("request to start game", code);
         const round = getRound(game.categories, game.rounds);
         const newGame = { ...game, started: true, currentRound: 1 };

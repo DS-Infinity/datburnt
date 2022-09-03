@@ -25,6 +25,7 @@ const GameContent = () => {
   const [roundDetails, setRoundDetails] = useState({});
   const [voteCandidates, setVoteCandidates] = useState([]);
   const [scores, setScores] = useState([]);
+  const [results, setResults] = useState([]);
   const [showVoting, setShowVoting] = useState(false);
   const [showScores, setShowScores] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -80,6 +81,7 @@ const GameContent = () => {
       });
 
       socket.on("results", (data) => {
+        setResults(data);
         setShowResult(true);
         setShowScores(false);
         setShowVoting(false);
@@ -151,7 +153,7 @@ const GameContent = () => {
                 currentRound={details.currentRound}
               />
             ) : showResult ? (
-              <Results />
+              <Results owner={details.owner} results={results} />
             ) : (
               <div></div>
             )

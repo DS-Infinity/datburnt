@@ -52,7 +52,7 @@ module.exports = (io) => {
         rounds: [],
         votes: [],
         code,
-        owner: socket.user._id,
+        owner: socket.user._id.toString(),
         prevQs: [],
       };
 

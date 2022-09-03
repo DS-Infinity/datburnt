@@ -124,6 +124,7 @@ module.exports = (io) => {
             game: {
               ...newGame,
               rounds: null,
+              votes: null,
             },
           });
           io.in(code).emit("players", newGame.players);
@@ -137,7 +138,6 @@ module.exports = (io) => {
         game.owner.toString() == socket.user._id.toString() &&
         game.players.length >= 3
       ) {
-        console.log("request to start game", code);
         const round = getRound(game.categories, game.rounds);
         const newGame = { ...game, started: true, currentRound: 1 };
         updateGame(code, newGame);
@@ -163,9 +163,54 @@ module.exports = (io) => {
         });
         updateGame(code, game);
         if (game.rounds[game.currentRound].length >= game.players.length) {
-          io.in(code).emit("voting", game.rounds[game.currentRound]);
+          setTimeout(() => {
+            io.in(code).emit("voting", game.rounds[game.currentRound]);
+          }, 1000);
+        }
+      }
+    });
+
+    socket.on("vote", ({ code, vote }) => {
+      const game = findGame(code);
+      if (!game.votes[game.currentRound]) {
+        game.votes[game.currentRound] = [];
+      }
+
+      const hasVoted = game.votes[game.currentRound].find(
+        (vote) => vote.voter === socket.user._id.toString()
+      );
+
+      if (!hasVoted) {
+        game.votes[game.currentRound].push({
+          voter: socket.user._id.toString(),
+          vote: vote,
+        });
+        updateGame(code, game);
+
+        if (game.votes[game.currentRound].length >= game.players.length) {
+          const game = findGame(code);
+          const voters = [];
+          game.votes[game.currentRound].forEach((v) => {
+            if (v.vote.replaceAll(" ", "").trim().length > 0) {
+              voters.push(v.voter);
+            }
+          });
+          game.votes[game.currentRound].forEach((v) => {
+            if (voters.includes(v.vote)) {
+              const i = game.players.findIndex((p) => p.id === v.vote);
+              const playerToIncreaseScore = { ...game.players[i] };
+              playerToIncreaseScore.score += 50;
+              game.players[i] = playerToIncreaseScore;
+            }
+          });
+
+          updateGame(code, game);
+          setTimeout(() => {
+            io.in(code).emit("score", game.players);
+          }, 1000);
         }
       }
     });
   });
 };
+

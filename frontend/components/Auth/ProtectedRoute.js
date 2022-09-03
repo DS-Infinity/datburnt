@@ -38,7 +38,7 @@ const ProtectedRoute = ({ children, inverse = false }) => {
         <div
           style={{
             height: "100vh",
-            width: "100vw",
+            width: "100%",
             display: "flex",
             jutsifyContent: "center",
             alignItems: "center",

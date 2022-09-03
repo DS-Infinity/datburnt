@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userAtom';
-import styles from './waiting.module.scss';
+import Image from "next/image";
+import { useRecoilState } from "recoil";
+import { userState } from "../../utils/userAtom";
+import styles from "./waiting.module.scss";
 
 const WaitingRoom = ({ details, players, onStart }) => {
   const [user, setUser] = useRecoilState(userState);
@@ -29,7 +29,7 @@ const WaitingRoom = ({ details, players, onStart }) => {
             Maximum Players: <span>{details.maxPlayers}</span>
           </div>
           <div className={styles.visibility}>
-            {details.private ? 'Private' : `⠀⠀⠀⠀⠀⠀⠀Public`}
+            {details.private ? "Private" : `⠀⠀⠀⠀⠀⠀⠀Public`}
           </div>
         </div>
         <div className={styles.cardBottom}>
@@ -38,20 +38,21 @@ const WaitingRoom = ({ details, players, onStart }) => {
             {details.categories.map((category) => {
               return (
                 <div
+                  key={category}
                   className={`${styles.category} ${
-                    category === 'Politics'
+                    category === "Politics"
                       ? styles.politics
-                      : category === 'Sports'
+                      : category === "Sports"
                       ? styles.sports
-                      : category === 'Celebs'
+                      : category === "Celebs"
                       ? styles.celebs
-                      : category === 'Companies'
+                      : category === "Companies"
                       ? styles.companies
-                      : category === 'Chats'
+                      : category === "Chats"
                       ? styles.chats
-                      : category === 'Random'
+                      : category === "Random"
                       ? styles.random
-                      : ''
+                      : ""
                   }`}
                 >
                   {category}
@@ -64,7 +65,7 @@ const WaitingRoom = ({ details, players, onStart }) => {
       <div className={styles.players}>
         {players.map((player) => {
           return (
-            <div className={styles.playerCard}>
+            <div className={styles.playerCard} key={player.id}>
               <div className={styles.playerImageContainer}>
                 <Image
                   className={styles.playerImage}

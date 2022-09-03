@@ -9,7 +9,7 @@ var State = (module.exports = {
       owner: "6303ac144024b5c0ea8ef4ba",
       players: [],
       rounds: [],
-      categories: ["politics", "sports", "celebs"],
+      categories: ["Politics", "Sports", "Celebs"],
     },
   ],
   setGames: function (newGames) {

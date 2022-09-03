@@ -18,7 +18,7 @@ const GameContent = () => {
   //   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
-
+  const [results, setResults] = useState([]);
   const [players, setPlayers] = useState([]);
   const [details, setDetails] = useState({});
   const [currentRound, setCurrentRound] = useState(0);
@@ -80,13 +80,14 @@ const GameContent = () => {
       });
 
       socket.on('results', (data) => {
+        setResults(data);
         setShowResult(true);
         setShowScores(false);
         setShowVoting(false);
       });
 
-      socket.on("end", () => {
-        router.push("/home");
+      socket.on('end', () => {
+        router.push('/home');
       });
     }
 
@@ -159,7 +160,7 @@ const GameContent = () => {
               <Results
                 owner={details.owner}
                 results={results}
-                endGame={() => socket.emit("end", router.query.code)}
+                endGame={() => socket.emit('end', router.query.code)}
               />
             ) : (
               <div></div>

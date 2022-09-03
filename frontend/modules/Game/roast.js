@@ -1,25 +1,82 @@
-import { useState, useEffect } from 'react';
-import PrimaryButton from '../../components/Button/Primary';
-import styles from './roast.module.scss';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { useState, useEffect } from "react";
+import PrimaryButton from "../../components/Button/Primary";
+import styles from "./roast.module.scss";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import useSound from "use-sound";
 
 const Roast = ({ round, details, submitRoast }) => {
-  const [myRoast, setMyRoast] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(3);
+  const [playCountdown, { stop, isPlaying }] = useSound(
+    "/sounds/countdown.mp3"
+  );
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (countdown <= 0) {
+      if (countdown < 0) {
+        clearInterval(interval);
+        // stop();
+      } else {
+        setCountdown(countdown - 1);
+        clearInterval(interval);
+      }
+    }, 1000);
+  }, [countdown]);
+
+  useEffect(() => {
+    if (playCountdown && !isPlaying) {
+      playCountdown();
+    }
+  }, [playCountdown, isPlaying]);
+
+  return (
+    <div
+      style={{
+        height: "80vh",
+        width: "100vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {countdown < 0 ? (
+        <RoastForm round={round} details={details} submitRoast={submitRoast} />
+      ) : (
+        <div className={styles.mainCountdown}>
+          {countdown == 0 ? "Go!" : countdown}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const RoastForm = ({ round, details, submitRoast }) => {
+  const [myRoast, setMyRoast] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [countdown, setCountdown] = useState(30);
+
+  const [playOof, { stop: stopOof }] = useSound("/sounds/oof.mp3");
+  const [playTicking, { stop: stopTicking }] = useSound("/sounds/ticking.mp3");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (countdown == 0) {
+        stopTicking();
+        playOof();
         clearInterval(interval);
         if (!submitted) {
           //   setSubmitted(true);
           const interval2 = setInterval(() => {
-            submitRoast('');
+            stopOof();
+            submitRoast("");
             clearInterval(interval2);
           }, 2000);
         }
       } else {
+        if (countdown == 11) {
+          playTicking();
+          // ticking.play();
+        }
         setCountdown(countdown - 1);
         clearInterval(interval);
       }
@@ -41,9 +98,18 @@ const Roast = ({ round, details, submitRoast }) => {
         ) : submitted ? (
           <div className={styles.done}>I bet that one hurt</div>
         ) : (
-          <form className={styles.roastForm}>
+          <form
+            className={styles.roastForm}
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (myRoast.length > 0) {
+                submitRoast(myRoast);
+                setSubmitted(true);
+              }
+            }}
+          >
             <input
-              placeholder='Your Roast'
+              placeholder="Your Roast"
               value={myRoast}
               onChange={(e) => setMyRoast(e.target.value)}
             />
@@ -77,7 +143,8 @@ const Roast = ({ round, details, submitRoast }) => {
               size={84}
               isPlaying
               duration={30}
-              colors={'#E93131'}
+              colors={"#E93131"}
+              strokeWidth={8}
             >
               {({ remainingTime }) => remainingTime}
             </CountdownCircleTimer>

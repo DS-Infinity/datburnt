@@ -35,6 +35,7 @@
     margin-right: 16px;
     font-weight: 500;
     border-radius: 14px;
+    height: 30px;
     &:focus {
       outline: none;
     }
@@ -82,4 +83,10 @@
   font-weight: 800;
   font-size: 32px;
   margin-top: 4vh;
+}
+
+.mainCountdown {
+  font-weight: 700;
+  font-size: 90px;
+  color: var(--primary);
 }

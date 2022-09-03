@@ -69,8 +69,8 @@ const WaitingRoom = ({ details, players, onStart }) => {
                 <Image
                   className={styles.playerImage}
                   src={player.avatarUrl}
-                  width={50}
-                  height={50}
+                  width={55}
+                  height={55}
                 />
               </div>
               <div className={styles.playerName}>{player.username}</div>

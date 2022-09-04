@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userAtom';
 import styles from './voting.module.scss';
@@ -62,26 +63,35 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
 
   return (
     <div className={styles.main}>
-      <h1>Voting</h1>
+      <h1>Voting!</h1>
       <div className={styles.description}>
         Vote for the roast you think would have hurt the most!
       </div>
-      <div>
+      <div className={styles.mainContainer}>
         <div className={styles.ImageContainer}>
           <img src={details.image} />
           <span>Category: {details.category}</span>
         </div>
-        <div>
+        <div className={styles.candidates}>
           {candidates.length < 2 ? (
             <div>Not enough people submitted a roast :(</div>
           ) : (
             candidates.map((candidate) => {
               return (
                 <div
+                  className={styles.candidate}
                   key={candidate.userid}
-                  style={{
-                    background: candidate.userid === vote ? '#f00' : '#fff',
-                  }}
+                  style={
+                    // background: candidate.userid === vote ? '#e93131' : '#fff',
+                    candidate.userid === vote
+                      ? {
+                          background: '#e93131',
+                          boxShadow: 'none',
+                          color: '#fff',
+                          transform: 'translateY(8px)',
+                        }
+                      : {}
+                  }
                   onClick={() => {
                     if (!voted) {
                       setVoted(true);
@@ -97,8 +107,21 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
           )}
         </div>
       </div>
-      <div></div>
-      <div>{countdown}</div>
+      <div className={styles.bottom}>
+        <div className={styles.hurry}>HURRY UP</div>
+        <div className={styles.timer}>
+          <CountdownCircleTimer
+            size={84}
+            isPlaying
+            duration={3000}
+            rea
+            colors={'#E93131'}
+            strokeWidth={8}
+          >
+            {({ remainingTime }) => countdown}
+          </CountdownCircleTimer>
+        </div>
+      </div>
     </div>
   );
 };

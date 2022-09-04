@@ -3,23 +3,26 @@ import { useRecoilState } from "recoil";
 import { userState } from "../../utils/userAtom";
 import styles from "./waiting.module.scss";
 import PrimaryButton from "../../components/Button/Primary";
+import { useEffect, useState } from "react";
+import RemoveIcon from "../../public/icons/cross.svg";
 
-const WaitingRoom = ({ details, players, onStart }) => {
+const WaitingRoom = ({ details, players, onStart, removePlayer }) => {
   const [user, setUser] = useRecoilState(userState);
+
+  const [ps, setPs] = useState([]);
+
+  useEffect(() => {
+    const mIndex = players.findIndex((p) => p.id === user._id);
+    const newPlayers = [...players];
+    newPlayers.splice(mIndex, 1);
+
+    const newPs = [players[mIndex], ...newPlayers];
+
+    setPs(newPs);
+  }, [players]);
 
   return (
     <div className={styles.container}>
-      {/* {JSON.stringify(details)}
-      <br />
-      <br />
-      <br />
-      Players -
-      {players.map((p) => {
-        return <p>{p.username}</p>;
-      })}
-      <div>
-        {details.owner === user._id && <button onClick={onStart}>Start</button>}
-      </div> */}
       <h1>Waiting for more players...</h1>
       <div className={styles.card}>
         <div className={styles.cardTop}>
@@ -64,18 +67,32 @@ const WaitingRoom = ({ details, players, onStart }) => {
         </div>
       </div>
       <div className={styles.players}>
-        {players.map((player) => {
+        {ps.map((player) => {
           return (
             <div className={styles.playerCard} key={player.id}>
               <div className={styles.playerImageContainer}>
-                <Image
+                <img
                   className={styles.playerImage}
                   src={player.avatarUrl}
                   width={55}
                   height={55}
                 />
               </div>
-              <div className={styles.playerName}>{player.username}</div>
+              <div>
+                <div className={styles.playerName}>{player.username}</div>
+                <div className={styles["you-label"]}>
+                  {player.id === user._id && "You"}
+                </div>
+              </div>
+              <div style={{ width: "100%" }} />
+              {details.owner === user._id && player.id != user._id && (
+                <div
+                  onClick={() => removePlayer(player.id)}
+                  className={styles["remove-player"]}
+                >
+                  <RemoveIcon />
+                </div>
+              )}
             </div>
           );
         })}

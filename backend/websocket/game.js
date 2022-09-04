@@ -255,5 +255,24 @@ module.exports = (io) => {
       state.setSockets({ ...state.sockets, [socket.id]: null });
       io.in(code).emit("end");
     });
+
+    socket.on("remove-player", ({ code, id }) => {
+      const game = findGame(code);
+
+      if (game.owner === socket.user._id.toString()) {
+        const i = game.players.findIndex((p) => p.id === id);
+        const playerToRemove = game.players[i];
+        const newPlayers = [...game.players];
+        newPlayers.splice(i, 1);
+        game.players = newPlayers;
+        updateGame(code, game);
+        
+        io.to(playerToRemove.socketId).emit("game-details", {
+          success: false,
+          message: "You have been removed from this game!",
+        });
+        io.in(code).emit("players", newPlayers);
+      }
+    });
   });
 };

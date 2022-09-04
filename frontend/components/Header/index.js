@@ -79,11 +79,11 @@ export default function Header(props) {
             className={styles.code}
             onClick={() => {
               navigator.clipboard.writeText(
-                `datburnt.vercel.app/${router.query.code}`
+                `https://datburnt.hop.sh/${router.query.code}`
               );
             }}
           >
-            datburnt.vercel.app/{router.query.code}
+            datburnt.hop.sh/{router.query.code}
           </div>
         ) : (
           <></>

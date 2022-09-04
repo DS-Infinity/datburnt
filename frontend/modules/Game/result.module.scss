@@ -46,6 +46,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  div {
+    width: 8vw;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }
 
 .second {
@@ -127,6 +133,11 @@
   font-weight: 700;
   color: #4e4e4e;
   font-size: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
 }
 
 .winner-avatar {

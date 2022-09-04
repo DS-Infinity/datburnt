@@ -8,21 +8,6 @@ import RemoveIcon from "../../public/icons/cross.svg";
 
 const WaitingRoom = ({ details, players, onStart, removePlayer }) => {
   const [user, setUser] = useRecoilState(userState);
-  const [playerList, setPlayerList] = useState(players);
-  useEffect(() => {
-    setPlayerList(players);
-    // const me = players.filter((player) => {
-    //   return player.id === user._id.toString();
-    // })[0];
-    const index = playerList.findIndex(
-      (player) => player.id === user._id.toString()
-    );
-    setPlayerList((playerList) => {
-      arrayMove(playerList, index, 0);
-      return playerList;
-    });
-    console.log(players);
-  }, [players]);
 
   const [ps, setPs] = useState([]);
 

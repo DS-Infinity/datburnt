@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 69vh;
 }
 
 .createTitle {
@@ -212,7 +213,7 @@
   align-items: center;
   border-radius: 50%;
   overflow: hidden;
-  border: 6px solid #24eb5c;
+  border: 6px solid rgba($color: #000000, $alpha: 0);
 }
 
 .avatar {
@@ -249,12 +250,48 @@
   background: white;
 }
 
+.friendPopup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  input {
+    border: 3px solid #d9d9d9;
+    font-size: 16px;
+    color: #797979;
+    flex-grow: 0.5;
+    padding: 12px 20px 12px 32px;
+    transform: translateY(4px);
+    margin-right: 16px;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 26px;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.addTitle {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  align-self: flex-start;
+}
+
 .friendName {
   font-size: 18px;
   font-weight: 700;
   color: #4e4e4e;
   margin: 0;
   margin-top: 8px;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
 }
 
 .friends {
@@ -265,6 +302,7 @@
 
 .publicRooms {
   margin-top: 16px;
+  margin-bottom: 8vh;
   display: flex;
   width: 100%;
   flex-wrap: wrap;

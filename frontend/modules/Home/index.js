@@ -48,6 +48,7 @@ export default function Content() {
   const [popupState2, setPopupState2] = useState(false);
   const [friendUsername, setFriendUsername] = useState('');
   const [friends, setFriends] = useState([]);
+  const [onlineFriends, setOnlineFriends] = useState([]);
 
   const [games, setGames] = useState([]);
 
@@ -81,7 +82,9 @@ export default function Content() {
       });
     });
 
-    console.log('friends', user.friends);
+    console.log('friendss', friends);
+
+    console.log('online friends', onlineFriends);
 
     console.log('useEffect run ');
     if (user && !socket) {
@@ -102,6 +105,14 @@ export default function Content() {
   useEffect(() => {
     if (state) {
       console.log(state.users);
+      setOnlineFriends(
+        friends.filter(
+          (friend) =>
+            state.users.filter(
+              (usera) => usera._id.toString() === friend._id.toString()
+            ).length > 0
+        )
+      );
     }
   }, [state]);
 
@@ -185,7 +196,18 @@ export default function Content() {
               </div>
               {friends.map((friend) => (
                 <div className={styles.friend}>
-                  <div className={styles.avatarContainer}>
+                  <div
+                    className={styles.avatarContainer}
+                    style={{
+                      border: `${
+                        onlineFriends.filter(
+                          (e) => e._id.toString() === friend._id.toString()
+                        ).length > 0
+                          ? '6px solid #24eb5c'
+                          : null
+                      }`,
+                    }}
+                  >
                     <Image
                       className={styles.avatar}
                       src={friend?.avatar}
@@ -447,9 +469,14 @@ export default function Content() {
               Create Game
             </PrimaryButton>
           </Popup>
-          <Popup popupState={popupState2} ref={popupRef2} center>
-            <h2>Add Friend</h2>
-            <div className={styles.addFriend}>
+          <Popup
+            popupState={popupState2}
+            ref={popupRef2}
+            center
+            className={styles.friendPopup}
+          >
+            <h2 className={styles.addTitle}>Add Friend</h2>
+            <div className={styles.addFriendStuff}>
               <input
                 type='text'
                 placeholder='Enter username'
@@ -457,6 +484,7 @@ export default function Content() {
                 onChange={(e) => setFriendUsername(e.target.value)}
               />
               <PrimaryButton
+              className={styles.addFriendButton}
                 onClick={() => {
                   axios
                     .post('/auth/getUser', {

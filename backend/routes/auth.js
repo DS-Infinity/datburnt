@@ -150,6 +150,10 @@ router.post('/add-frand', auth, async (req, res) => {
     const user = await User.findOne({ _id: userId });
     const friend = await User.findOne({ _id: friendId });
 
+    if (user.friends.includes(friend._id)) {
+      return res.send({ success: false, message: 'Already friends' });
+    }
+
     user.friends.push(friendId);
 
     await user.save();

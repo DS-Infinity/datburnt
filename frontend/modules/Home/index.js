@@ -75,7 +75,7 @@ export default function Content() {
   useEffect(() => {
     user.friends.forEach((element) => {
       axios.post('/auth/getUserFromID', { userId: element }).then((res) => {
-        setFriends((f) => [...f, res.data.user]);
+        setFriends((f) => [res.data.user]);
       });
     });
 
@@ -444,6 +444,7 @@ export default function Content() {
                     .then((res) => {
                       if (res.data.success) {
                         console.log(res.data.user);
+                        setFriends([...friends, res.data.user]);
                         axios
                           .post('/auth/add-frand', {
                             userId: user._id.toString(),

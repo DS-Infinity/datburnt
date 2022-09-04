@@ -9,6 +9,7 @@ export default function Content() {
   const [userName, setUserName] = useState('');
   const [userPass, setUserPass] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [error, setError] = useState('');
   const [user, setUser] = useRecoilState(userState);
 
   const [registering, setRegistering] = useState(false);
@@ -75,12 +76,16 @@ export default function Content() {
               if (data.success) {
                 setUser(data.user);
                 return (window.location.href = '/home');
+              } else {
+                setError(data.message);
+                setRegistering(false);
               }
             }}
             loading={registering}
           >
             Create Account
           </PrimaryButton>
+          <div className={styles.error}>{error}</div>
         </div>
       </div>
     </div>

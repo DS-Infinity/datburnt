@@ -7,6 +7,7 @@ import PrimaryButton from '../../components/Button/Primary';
 
 export default function Content() {
   const [userEmail, setUserEmail] = useState('');
+  const [error, setError] = useState('');
   const [userPass, setUserPass] = useState('');
   const [user, setUser] = useRecoilState(userState);
   const [loggingIn, setLoggingIn] = useState(false);
@@ -49,12 +50,16 @@ export default function Content() {
               if (data.success) {
                 setUser(data.user);
                 return (window.location.href = '/home');
+              } else {
+                setError(data.message);
+                setLoggingIn(false);
               }
             }}
             loading={loggingIn}
           >
             Login
           </PrimaryButton>
+          <div className={styles.error}>{error}</div>
         </div>
       </div>
     </div>

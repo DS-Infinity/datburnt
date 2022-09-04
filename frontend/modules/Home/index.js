@@ -1,50 +1,66 @@
-import PageStyles from "../../styles/pages/index.module.scss";
-import { useState, useEffect } from "react";
-import Loader from "../../components/Loader";
-import io from "socket.io-client";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/userAtom";
-import { Popup, useOnClickOutside } from "../../components/Popup";
-import styles from "./index.module.scss";
-import PrimaryButton from "../../components/Button/Primary";
-import InputRange from "react-input-range";
-import Slider from "react-input-slider";
-import { useRouter } from "next/router";
-import classNames from "classnames";
+import PageStyles from '../../styles/pages/index.module.scss';
+import { useState, useEffect } from 'react';
+import Loader from '../../components/Loader';
+import io from 'socket.io-client';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userAtom';
+import { Popup, useOnClickOutside } from '../../components/Popup';
+import styles from './index.module.scss';
+import PrimaryButton from '../../components/Button/Primary';
+import InputRange from 'react-input-range';
+import Slider from 'react-input-slider';
+import { useRouter } from 'next/router';
+import classNames from 'classnames';
+import { hop } from '@onehop/client';
+import { useChannelMessage, useReadChannelState } from '@onehop/react';
 const cx = classNames.bind(styles);
 
-import PublicIcon from "../../public/icons/public.svg";
-import PrivateIcon from "../../public/icons/private.svg";
+const channelId = 'online_users';
+
+import PublicIcon from '../../public/icons/public.svg';
+import PrivateIcon from '../../public/icons/private.svg';
 // import 'react-input-range/lib/css/index.css';
 
 export default function Content() {
+  const { state } = useReadChannelState(channelId);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  hop.init({
+    projectId: 'project_NDYyNjgzMTExOTM4NDU4MTc', // replace with your project ID
+  });
   const router = useRouter();
 
   const popupRef = useState();
   const popupRef2 = useState();
-  const [visibility, setVisibility] = useState("public");
+  const [visibility, setVisibility] = useState('public');
   const [playerNumber, setPlayerNumber] = useState(3);
   const [categories, setCategories] = useState([
-    "Politics",
-    "Sports",
-    "Celebs",
-    "Companies",
+    'Politics',
+    'Sports',
+    'Celebs',
+    'Companies',
   ]);
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useRecoilState(userState);
   const [popupState, setPopupState] = useState(false);
   const [popupState2, setPopupState2] = useState(false);
+  const [friendUsername, setFriendUsername] = useState('');
 
   const [games, setGames] = useState([]);
 
-  const [codeInput, setCodeInput] = useState("");
+  const [codeInput, setCodeInput] = useState('');
+
+  // useChannelMessage(channelId, 'USER_JOIN', (user) => {
+  // 	// this will be called every time the USER_MESSAGE event is sent to this channel
+  // 	setChatMessages(m => [...m, message]);
+  // });
 
   useOnClickOutside(popupRef, () => {
     setPopupState(false);
+  });
+  useOnClickOutside(popupRef2, () => {
     setPopupState2(false);
   });
-
   // useEffect(() => {
   //   //disconnect socket when the component unmounts
   //   if (!socket) return;
@@ -55,7 +71,7 @@ export default function Content() {
   // }, []);
 
   useEffect(() => {
-    console.log("useEffect run ");
+    console.log('useEffect run ');
     if (user && !socket) {
       const sock = io(`${process.env.NEXT_PUBLIC_API_URL}/home`, {
         withCredentials: true,
@@ -63,7 +79,7 @@ export default function Content() {
       setSocket(sock);
     }
 
-    window.addEventListener("beforeunload", (e) => {
+    window.addEventListener('beforeunload', (e) => {
       //e.preventDefault()
       socket?.disconnect();
     });
@@ -73,12 +89,12 @@ export default function Content() {
 
   useEffect(() => {
     if (socket) {
-      socket.on("games", (data) => {
+      socket.on('games', (data) => {
         console.log(data.games);
         setGames(data.games);
       });
 
-      socket.on("redirect", (code) => {
+      socket.on('redirect', (code) => {
         router.push(`/${code}`);
       });
     }
@@ -89,8 +105,8 @@ export default function Content() {
       {loading || !socket ? (
         <div
           style={{
-            display: "flex",
-            height: "80vh",
+            display: 'flex',
+            height: '80vh',
           }}
         >
           <Loader center />
@@ -125,13 +141,13 @@ export default function Content() {
                 className={styles.codeRoom}
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (codeInput.replaceAll(" ", "").length > 0) {
-                    router.push(`/${codeInput.replaceAll(" ", "")}`);
+                  if (codeInput.replaceAll(' ', '').length > 0) {
+                    router.push(`/${codeInput.replaceAll(' ', '')}`);
                   }
                 }}
               >
                 <input
-                  placeholder="Enter Code"
+                  placeholder='Enter Code'
                   value={codeInput}
                   onChange={(e) => setCodeInput(e.target.value)}
                 />
@@ -142,7 +158,9 @@ export default function Content() {
             <div className={styles.friends}>
               <div
                 className={styles.addFriend}
-                onClick={() => setPopupState2(true)}
+                onClick={() => {
+                  setPopupState2(true);
+                }}
               >
                 add frand
               </div>
@@ -160,7 +178,7 @@ export default function Content() {
                   <button
                     className={styles.roomJoin}
                     onClick={() => {
-                      console.log("join room");
+                      console.log('join room');
                       router.push(`/${game.code}`);
                     }}
                   >
@@ -192,23 +210,23 @@ export default function Content() {
                 <div className={styles.visibility}>
                   <div
                     className={cx(styles.visibility__option, {
-                      [styles["visibility__option--selected"]]:
-                        visibility === "public",
+                      [styles['visibility__option--selected']]:
+                        visibility === 'public',
                     })}
-                    onClick={() => setVisibility("public")}
+                    onClick={() => setVisibility('public')}
                   >
                     <PublicIcon />
-                    <div style={{ width: "5px" }} /> Public
+                    <div style={{ width: '5px' }} /> Public
                   </div>
                   <div
                     className={cx(styles.visibility__option, {
-                      [styles["visibility__option--selected"]]:
-                        visibility === "private",
+                      [styles['visibility__option--selected']]:
+                        visibility === 'private',
                     })}
-                    onClick={() => setVisibility("private")}
+                    onClick={() => setVisibility('private')}
                   >
                     <PrivateIcon />
-                    <div style={{ width: "5px" }} />
+                    <div style={{ width: '5px' }} />
                     Private
                   </div>
                   {/* <span
@@ -238,17 +256,17 @@ export default function Content() {
                   No. of Players - {playerNumber}
                 </div>
                 <Slider
-                  axis="x"
+                  axis='x'
                   xstep={0.1}
                   xmin={3}
                   xmax={8}
                   x={playerNumber}
                   styles={{
                     active: {
-                      background: "#e93131",
+                      background: '#e93131',
                     },
                   }}
-                  style={{ width: "100%", marginTop: "16px" }}
+                  style={{ width: '100%', marginTop: '16px' }}
                   onChange={({ x }) =>
                     setPlayerNumber(parseFloat(x.toFixed(0)))
                   }
@@ -265,17 +283,17 @@ export default function Content() {
                     <div
                       className={styles.politics}
                       style={
-                        categories.includes("Politics")
+                        categories.includes('Politics')
                           ? {}
-                          : { background: "#0b50b826", color: "#0b50b8" }
+                          : { background: '#0b50b826', color: '#0b50b8' }
                       }
                       onClick={() => {
-                        if (categories.includes("Politics")) {
+                        if (categories.includes('Politics')) {
                           setCategories(
-                            categories.filter((cat) => cat !== "Politics")
+                            categories.filter((cat) => cat !== 'Politics')
                           );
                         } else {
-                          setCategories([...categories, "Politics"]);
+                          setCategories([...categories, 'Politics']);
                         }
                       }}
                     >
@@ -284,17 +302,17 @@ export default function Content() {
                     <div
                       className={styles.sports}
                       style={
-                        categories.includes("Sports")
+                        categories.includes('Sports')
                           ? {}
-                          : { background: "#0bb85026", color: "#0bb850" }
+                          : { background: '#0bb85026', color: '#0bb850' }
                       }
                       onClick={() => {
-                        if (categories.includes("Sports")) {
+                        if (categories.includes('Sports')) {
                           setCategories(
-                            categories.filter((cat) => cat !== "Sports")
+                            categories.filter((cat) => cat !== 'Sports')
                           );
                         } else {
-                          setCategories([...categories, "Sports"]);
+                          setCategories([...categories, 'Sports']);
                         }
                       }}
                     >
@@ -303,17 +321,17 @@ export default function Content() {
                     <div
                       className={styles.celebs}
                       style={
-                        categories.includes("Celebs")
+                        categories.includes('Celebs')
                           ? {}
-                          : { background: "#ee2a2a26", color: "#ee2a2a" }
+                          : { background: '#ee2a2a26', color: '#ee2a2a' }
                       }
                       onClick={() => {
-                        if (categories.includes("Celebs")) {
+                        if (categories.includes('Celebs')) {
                           setCategories(
-                            categories.filter((cat) => cat !== "Celebs")
+                            categories.filter((cat) => cat !== 'Celebs')
                           );
                         } else {
-                          setCategories([...categories, "Celebs"]);
+                          setCategories([...categories, 'Celebs']);
                         }
                       }}
                     >
@@ -324,17 +342,17 @@ export default function Content() {
                     <div
                       className={styles.companies}
                       style={
-                        categories.includes("Companies")
+                        categories.includes('Companies')
                           ? {}
-                          : { background: "#ed981926", color: "#ed9819" }
+                          : { background: '#ed981926', color: '#ed9819' }
                       }
                       onClick={() => {
-                        if (categories.includes("Companies")) {
+                        if (categories.includes('Companies')) {
                           setCategories(
-                            categories.filter((cat) => cat !== "Companies")
+                            categories.filter((cat) => cat !== 'Companies')
                           );
                         } else {
-                          setCategories([...categories, "Companies"]);
+                          setCategories([...categories, 'Companies']);
                         }
                       }}
                     >
@@ -343,17 +361,17 @@ export default function Content() {
                     <div
                       className={styles.chats}
                       style={
-                        categories.includes("Chats")
+                        categories.includes('Chats')
                           ? {}
-                          : { background: "#d51de526", color: "#d51de5" }
+                          : { background: '#d51de526', color: '#d51de5' }
                       }
                       onClick={() => {
-                        if (categories.includes("Chats")) {
+                        if (categories.includes('Chats')) {
                           setCategories(
-                            categories.filter((cat) => cat !== "Chats")
+                            categories.filter((cat) => cat !== 'Chats')
                           );
                         } else {
-                          setCategories([...categories, "Chats"]);
+                          setCategories([...categories, 'Chats']);
                         }
                       }}
                     >
@@ -362,17 +380,17 @@ export default function Content() {
                     <div
                       className={styles.random}
                       style={
-                        categories.includes("Random")
+                        categories.includes('Random')
                           ? {}
-                          : { background: "#f412c326", color: "#f412c3" }
+                          : { background: '#f412c326', color: '#f412c3' }
                       }
                       onClick={() => {
-                        if (categories.includes("Random")) {
+                        if (categories.includes('Random')) {
                           setCategories(
-                            categories.filter((cat) => cat !== "Random")
+                            categories.filter((cat) => cat !== 'Random')
                           );
                         } else {
-                          setCategories([...categories, "Random"]);
+                          setCategories([...categories, 'Random']);
                         }
                       }}
                     >
@@ -385,12 +403,12 @@ export default function Content() {
             <PrimaryButton
               onClick={() => {
                 const payload = {
-                  private: visibility === "private",
+                  private: visibility === 'private',
                   maxPlayers: playerNumber,
                   categories: categories,
                 };
 
-                socket.emit("newgame", payload);
+                socket.emit('newgame', payload);
                 setPopupState(false);
               }}
             >
@@ -398,7 +416,27 @@ export default function Content() {
             </PrimaryButton>
           </Popup>
           <Popup popupState={popupState2} ref={popupRef2} center>
-            ANOTHER POPUP BITCH
+            <h2>Add Friend</h2>
+            <div className={styles.addFriend}>
+              <input
+                type='text'
+                placeholder='Enter username'
+                value={friendUsername}
+                onChange={(e) => setFriendUsername(e.target.value)}
+              />
+              <PrimaryButton
+                onClick={() => {
+                  hop.channels.setState(channelId, (s) => ({
+                    ...s,
+                    name: 'My Channel',
+                  }));
+                  // socket.emit('addfriend', friendUsername);
+                  // setPopupState2(false);
+                }}
+              >
+                Add Friend
+              </PrimaryButton>
+            </div>
           </Popup>
         </div>
       )}

@@ -1,11 +1,12 @@
 .main {
   width: 100vw;
-  height: 100%;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  h1 {
+  margin-bottom: 80px;
+  & h1 {
     color: #4e4e4e;
     font-weight: 800;
     font-size: 36px;
@@ -35,4 +36,45 @@
   color: #5e5e5e;
   font-size: 20px;
   margin-left: 3vw;
+}
+
+.score-chart {
+  width: 100%;
+  height: 100%;
+  // background: #f0f;
+  flex: 1;
+  margin-bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  &__bars {
+    flex: 1;
+    // background: #f0f;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  &__line {
+    width: 90%;
+    height: 2px;
+    background: #d9d9d9;
+    // margin-left: 60px;
+  }
+  &__avatars {
+    height: 90px;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+
+    & img {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      border: 5px solid var(--primary);
+    }
+  }
 }

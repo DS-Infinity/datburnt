@@ -61,14 +61,10 @@ module.exports = (io) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("New Game Connection: ", socket.id);
-
     socket.on("disconnect", () => {
-      console.log("Game Disconnection: ", socket.id);
       const code = state.sockets[socket.id];
 
       if (code) {
-        console.log("Leaving from ", code);
         const game = findGame(code);
         if (game) {
           const index = game.players.findIndex(
@@ -78,6 +74,9 @@ module.exports = (io) => {
 
           if (index >= 0) {
             game.players.splice(index, 1);
+            console.log(
+              `${socket.id} left room ${code}. ${game.players.length} Players left in room`
+            );
             updateGame(code, game);
             state.setSockets({ ...state.sockets, [socket.id]: null });
             io.in(code).emit("players", game.players);
@@ -90,6 +89,7 @@ module.exports = (io) => {
               state.setSockets({ ...state.sockets, [socket.id]: null });
               io.in(code).emit("end");
               console.log("Deleting Room:", code);
+              console.log("No. of Rooms Now:", gs.length);
             }
           }
         }
@@ -241,11 +241,8 @@ module.exports = (io) => {
     });
 
     socket.on("next-round", (code) => {
-      console.log("next round");
       const game = findGame(code);
-      console.log(`${game.owner}, ${socket.user._id.toString()}`);
       if (game.owner === socket.user._id.toString()) {
-        console.log("owner");
         const nextRound = game.currentRound + 1;
 
         if (nextRound > 5) {
@@ -282,16 +279,18 @@ module.exports = (io) => {
       if (game.owner === socket.user._id.toString()) {
         const i = game.players.findIndex((p) => p.id === id);
         const playerToRemove = game.players[i];
-        const newPlayers = [...game.players];
-        newPlayers.splice(i, 1);
-        game.players = newPlayers;
-        updateGame(code, game);
+        if (playerToRemove && playerToRemove.socketId) {
+          const newPlayers = [...game.players];
+          newPlayers.splice(i, 1);
+          game.players = newPlayers;
+          updateGame(code, game);
 
-        io.to(playerToRemove.socketId).emit("game-details", {
-          success: false,
-          message: "You have been removed from this game!",
-        });
-        io.in(code).emit("players", newPlayers);
+          io.to(playerToRemove.socketId).emit("game-details", {
+            success: false,
+            message: "You have been removed from this game!",
+          });
+          io.in(code).emit("players", newPlayers);
+        }
       }
     });
   });

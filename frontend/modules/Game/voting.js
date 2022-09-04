@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userAtom';
-import styles from './voting.module.scss';
+import { useState, useEffect } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useRecoilState } from "recoil";
+import { userState } from "../../utils/userAtom";
+import styles from "./voting.module.scss";
+import useSound from "use-sound";
 
 const Voting = ({ details, voteCandidates, submitVote }) => {
   const [candidates, setCandidates] = useState([]);
@@ -10,12 +11,16 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
 
   const [startCountdown, setStartCountdown] = useState(false);
   const [voted, setVoted] = useState(false);
-  const [vote, setVote] = useState('');
+  const [vote, setVote] = useState("");
+
+  const [playOof, { stop: stopOof }] = useSound("/sounds/oof.mp3");
+  const [playTicking, { stop: stopTicking }] = useSound("/sounds/ticking.mp3");
+  const [playBeep] = useSound("/sounds/beep.mp3");
 
   useEffect(() => {
     const c = [];
     voteCandidates.forEach((can) => {
-      if (can.roast.replaceAll(' ', '').length > 0 && can.userid != user._id) {
+      if (can.roast.replaceAll(" ", "").length > 0 && can.userid != user._id) {
         c.push(can);
       }
     });
@@ -24,7 +29,7 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
       if (!voted) {
         setTimeout(() => {
           if (!voted) {
-            submitVote('NEO');
+            submitVote("NEO");
           }
           setVoted(true);
           // clearInterval(interval);
@@ -47,11 +52,26 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
           if (!voted) {
             //   setSubmitted(true);
             const interval2 = setInterval(() => {
-              submitVote('');
+              stopOof();
+              submitVote("");
               clearInterval(interval2);
             }, 2000);
           }
         } else {
+          if (countdown == 11) {
+            if (!voted) {
+              playTicking();
+            }
+          }
+
+          if (voted) {
+            stopTicking();
+          }
+
+          if (countdown == 1) {
+            stopTicking();
+            playOof();
+          }
           setCountdown(countdown - 1);
           clearInterval(interval);
         }
@@ -87,15 +107,17 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
                     // background: candidate.userid === vote ? '#e93131' : '#fff',
                     candidate.userid === vote
                       ? {
-                          background: '#e93131',
-                          boxShadow: 'none',
-                          color: '#fff',
-                          transform: 'translateY(8px)',
+                          background: "#e93131",
+                          boxShadow: "none",
+                          color: "#fff",
+                          transform: "translateY(8px)",
                         }
                       : {}
                   }
                   onClick={() => {
                     if (!voted) {
+                      playBeep();
+                      stopTicking();
                       setVoted(true);
                       setVote(candidate.userid);
                       submitVote(candidate.userid);
@@ -117,7 +139,7 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
             isPlaying
             duration={30}
             rea
-            colors={'#E93131'}
+            colors={"#E93131"}
             strokeWidth={8}
           >
             {({ remainingTime }) => countdown}

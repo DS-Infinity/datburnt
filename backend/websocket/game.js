@@ -1,9 +1,9 @@
-const makeid = require('../utils/makeid');
-const state = require('../state');
-const { parse } = require('cookie');
-const jwt = require('jsonwebtoken');
+const makeid = require("../utils/makeid");
+const state = require("../state");
+const { parse } = require("cookie");
+const jwt = require("jsonwebtoken");
 
-const User = require('../models/User');
+const User = require("../models/User");
 
 function findGame(code) {
   const games = state.games;
@@ -22,8 +22,8 @@ function findGame(code) {
 function getRound(categories, previousRounds) {
   return {
     image:
-      'https://media.discordapp.net/attachments/772689583019393084/1015302933526622318/unknown.png?width=638&height=586',
-    category: 'Politics',
+      "https://media.discordapp.net/attachments/772689583019393084/1015302933526622318/unknown.png?width=638&height=586",
+    category: "Politics",
   };
 }
 
@@ -50,15 +50,15 @@ module.exports = (io) => {
     }
   });
 
-  io.on('connection', (socket) => {
-    console.log('New Game Connection: ', socket.id);
+  io.on("connection", (socket) => {
+    console.log("New Game Connection: ", socket.id);
 
-    socket.on('disconnect', () => {
-      console.log('Game Disconnection: ', socket.id);
+    socket.on("disconnect", () => {
+      console.log("Game Disconnection: ", socket.id);
       const code = state.sockets[socket.id];
 
       if (code) {
-        console.log('Leaving from ', code);
+        console.log("Leaving from ", code);
         const game = findGame(code);
         if (game) {
           const index = game.players.findIndex(
@@ -78,31 +78,31 @@ module.exports = (io) => {
       socket.disconnect();
     });
 
-    socket.on('join-game', (code) => {
+    socket.on("join-game", (code) => {
       const game = findGame(code);
 
       if (!game) {
-        io.to(socket.id).emit('game-details', {
+        io.to(socket.id).emit("game-details", {
           success: false,
-          message: 'Game not Found',
+          message: "Game not Found",
         });
       } else {
         if (game.started) {
-          io.to(socket.id).emit('game-details', {
+          io.to(socket.id).emit("game-details", {
             success: false,
-            message: 'Game has already started',
+            message: "Game has already started",
           });
         } else if (game.players.length >= game.maxPlayers) {
-          io.to(socket.id).emit('game-details', {
+          io.to(socket.id).emit("game-details", {
             success: false,
-            message: 'Game is full',
+            message: "Game is full",
           });
         } else if (
           game.players.find((p) => p.id == socket.user._id.toString())
         ) {
-          io.to(socket.id).emit('game-details', {
+          io.to(socket.id).emit("game-details", {
             success: false,
-            message: 'You have already joined this game',
+            message: "You have already joined this game",
           });
         } else {
           const newGame = {
@@ -122,7 +122,7 @@ module.exports = (io) => {
           updateGame(code, newGame);
           state.setSockets({ ...state.sockets, [socket.id]: code });
           socket.join(code);
-          socket.emit('game-details', {
+          socket.emit("game-details", {
             success: true,
             game: {
               ...newGame,
@@ -130,12 +130,12 @@ module.exports = (io) => {
               votes: null,
             },
           });
-          io.in(code).emit('players', newGame.players);
+          io.in(code).emit("players", newGame.players);
         }
       }
     });
 
-    socket.on('start', (code) => {
+    socket.on("start", (code) => {
       const game = findGame(code);
       if (
         game.owner.toString() == socket.user._id.toString() &&
@@ -149,11 +149,11 @@ module.exports = (io) => {
           prevQs: [...game.prevQs, round],
         };
         updateGame(code, newGame);
-        io.in(code).emit('next-round', { round: 1, details: round });
+        io.in(code).emit("next-round", { round: 1, details: round });
       }
     });
 
-    socket.on('submit', ({ code, roast }) => {
+    socket.on("submit", ({ code, roast }) => {
       const game = findGame(code);
       if (!game.rounds[game.currentRound]) {
         game.rounds[game.currentRound] = [];
@@ -172,13 +172,13 @@ module.exports = (io) => {
         updateGame(code, game);
         if (game.rounds[game.currentRound].length >= game.players.length) {
           setTimeout(() => {
-            io.in(code).emit('voting', game.rounds[game.currentRound]);
+            io.in(code).emit("voting", game.rounds[game.currentRound]);
           }, 1000);
         }
       }
     });
 
-    socket.on('vote', ({ code, vote }) => {
+    socket.on("vote", ({ code, vote }) => {
       const game = findGame(code);
       if (!game.votes[game.currentRound]) {
         game.votes[game.currentRound] = [];
@@ -199,7 +199,7 @@ module.exports = (io) => {
           const game = findGame(code);
           const voters = [];
           game.votes[game.currentRound].forEach((v) => {
-            if (v.vote.replaceAll(' ', '').trim().length > 0) {
+            if (v.vote.replaceAll(" ", "").trim().length > 0) {
               voters.push(v.voter);
             }
           });
@@ -214,25 +214,25 @@ module.exports = (io) => {
 
           updateGame(code, game);
           setTimeout(() => {
-            io.in(code).emit('score', game.players);
+            io.in(code).emit("score", game.players);
           }, 1000);
         }
       }
     });
 
-    socket.on('next-round', (code) => {
-      console.log('next round');
+    socket.on("next-round", (code) => {
+      console.log("next round");
       const game = findGame(code);
       console.log(`${game.owner}, ${socket.user._id.toString()}`);
       if (game.owner === socket.user._id.toString()) {
-        console.log('owner');
+        console.log("owner");
         const nextRound = game.currentRound + 1;
 
         if (nextRound > 5) {
           const winners = game.players.sort((a, b) => {
             return -(a.score - b.score);
           });
-          io.in(code).emit('results', winners);
+          io.in(code).emit("results", winners);
         } else {
           const round = getRound(game.categories, game.prevQs);
           const newGame = {
@@ -242,7 +242,7 @@ module.exports = (io) => {
             prevQs: [...game.prevQs, round],
           };
           updateGame(code, newGame);
-          io.in(code).emit('next-round', { round: nextRound, details: round });
+          io.in(code).emit("next-round", { round: nextRound, details: round });
         }
       }
     });

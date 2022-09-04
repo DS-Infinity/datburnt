@@ -15,7 +15,7 @@ const Roast = ({ round, details, submitRoast }) => {
     const interval = setInterval(() => {
       if (countdown < 0) {
         clearInterval(interval);
-        // stop();
+        stop();
       } else {
         setCountdown(countdown - 1);
         clearInterval(interval);
@@ -61,11 +61,8 @@ const RoastForm = ({ round, details, submitRoast }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (countdown == 0) {
-        // stopTicking();
-        // playOof();
         clearInterval(interval);
         if (!submitted) {
-          //   setSubmitted(true);
           const interval2 = setInterval(() => {
             stopOof();
             submitRoast("");
@@ -74,8 +71,13 @@ const RoastForm = ({ round, details, submitRoast }) => {
         }
       } else {
         if (countdown == 11) {
-          playTicking();
-          // ticking.play();
+          if (!submitted) {
+            playTicking();
+          }
+        }
+
+        if (submitted) {
+          stopTicking();
         }
 
         if (countdown == 1) {
@@ -86,7 +88,11 @@ const RoastForm = ({ round, details, submitRoast }) => {
         clearInterval(interval);
       }
 
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+        stopTicking();
+        stopOof();
+      };
     }, 1000);
   }, [countdown]);
 
@@ -109,6 +115,7 @@ const RoastForm = ({ round, details, submitRoast }) => {
               e.preventDefault();
               if (myRoast.length > 0) {
                 submitRoast(myRoast);
+                stopTicking();
                 setSubmitted(true);
               }
             }}
@@ -122,6 +129,7 @@ const RoastForm = ({ round, details, submitRoast }) => {
               onClick={() => {
                 if (myRoast.length > 0) {
                   submitRoast(myRoast);
+                  stopTicking();
                   setSubmitted(true);
                 }
               }}

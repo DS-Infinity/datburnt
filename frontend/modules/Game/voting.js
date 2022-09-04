@@ -37,7 +37,7 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
     }
   }, [voteCandidates]);
 
-  const [countdown, setCountdown] = useState(3000);
+  const [countdown, setCountdown] = useState(30);
 
   useEffect(() => {
     if (startCountdown) {
@@ -115,7 +115,7 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
           <CountdownCircleTimer
             size={84}
             isPlaying
-            duration={3000}
+            duration={30}
             rea
             colors={'#E93131'}
             strokeWidth={8}

@@ -132,7 +132,9 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
         </div>
       </div>
       <div className={styles.bottom}>
-        <div className={styles.hurry}>HURRY UP</div>
+        <div className={styles.hurry}>
+          If you do not vote, any votes to your roast won't be counted
+        </div>
         <div className={styles.timer}>
           <CountdownCircleTimer
             size={84}

@@ -11,9 +11,12 @@ const config = require('./config');
 const server = require('http').createServer(app);
 var io = require('socket.io')(server, {
   cors: {
-    origin: 'http://localhost:3001',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['my-custom-header'],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL_PROD
+        : process.env.FRONTEND_URL_DEV,
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
     credentials: true,
   },
 });

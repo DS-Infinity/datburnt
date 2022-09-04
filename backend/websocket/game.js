@@ -19,10 +19,20 @@ function findGame(code) {
   return g;
 }
 
+const images = [
+  "https://media.discordapp.net/attachments/772689583019393084/1015302933526622318/unknown.png?width=638&height=586",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015909432254808104/unknown.png",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015909608520437800/unknown.png",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015909737495269376/unknown.png",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015910009428787200/unknown.png",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015910704856973392/unknown.png",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015911232563322890/unknown.png",
+  "https://cdn.discordapp.com/attachments/896998944935120907/1015911668057903124/unknown.png",
+];
+
 function getRound(categories, previousRounds) {
   return {
-    image:
-      "https://media.discordapp.net/attachments/772689583019393084/1015302933526622318/unknown.png?width=638&height=586",
+    image: images[previousRounds.length],
     category: "Politics",
   };
 }

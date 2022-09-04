@@ -1,15 +1,20 @@
-import PageStyles from '../../styles/pages/index.module.scss';
-import { useState, useEffect } from 'react';
-import Loader from '../../components/Loader';
-import io from 'socket.io-client';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userAtom';
-import { Popup, useOnClickOutside } from '../../components/Popup';
-import styles from './index.module.scss';
-import PrimaryButton from '../../components/Button/Primary';
-import InputRange from 'react-input-range';
-import Slider from 'react-input-slider';
-import { useRouter } from 'next/router';
+import PageStyles from "../../styles/pages/index.module.scss";
+import { useState, useEffect } from "react";
+import Loader from "../../components/Loader";
+import io from "socket.io-client";
+import { useRecoilState } from "recoil";
+import { userState } from "../../utils/userAtom";
+import { Popup, useOnClickOutside } from "../../components/Popup";
+import styles from "./index.module.scss";
+import PrimaryButton from "../../components/Button/Primary";
+import InputRange from "react-input-range";
+import Slider from "react-input-slider";
+import { useRouter } from "next/router";
+import classNames from "classnames";
+const cx = classNames.bind(styles);
+
+import PublicIcon from "../../public/icons/public.svg";
+import PrivateIcon from "../../public/icons/private.svg";
 // import 'react-input-range/lib/css/index.css';
 
 export default function Content() {
@@ -17,13 +22,13 @@ export default function Content() {
 
   const popupRef = useState();
   const popupRef2 = useState();
-  const [visibility, setVisibility] = useState('public');
+  const [visibility, setVisibility] = useState("public");
   const [playerNumber, setPlayerNumber] = useState(3);
   const [categories, setCategories] = useState([
-    'Politics',
-    'Sports',
-    'Celebs',
-    'Companies',
+    "Politics",
+    "Sports",
+    "Celebs",
+    "Companies",
   ]);
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
@@ -32,6 +37,8 @@ export default function Content() {
   const [popupState2, setPopupState2] = useState(false);
 
   const [games, setGames] = useState([]);
+
+  const [codeInput, setCodeInput] = useState("");
 
   useOnClickOutside(popupRef, () => {
     setPopupState(false);
@@ -48,7 +55,7 @@ export default function Content() {
   // }, []);
 
   useEffect(() => {
-    console.log('useEffect run ');
+    console.log("useEffect run ");
     if (user && !socket) {
       const sock = io(`${process.env.NEXT_PUBLIC_API_URL}/home`, {
         withCredentials: true,
@@ -56,7 +63,7 @@ export default function Content() {
       setSocket(sock);
     }
 
-    window.addEventListener('beforeunload', (e) => {
+    window.addEventListener("beforeunload", (e) => {
       //e.preventDefault()
       socket?.disconnect();
     });
@@ -66,12 +73,12 @@ export default function Content() {
 
   useEffect(() => {
     if (socket) {
-      socket.on('games', (data) => {
+      socket.on("games", (data) => {
         console.log(data.games);
         setGames(data.games);
       });
 
-      socket.on('redirect', (code) => {
+      socket.on("redirect", (code) => {
         router.push(`/${code}`);
       });
     }
@@ -82,8 +89,8 @@ export default function Content() {
       {loading || !socket ? (
         <div
           style={{
-            display: 'flex',
-            height: '80vh',
+            display: "flex",
+            height: "80vh",
           }}
         >
           <Loader center />
@@ -114,10 +121,22 @@ export default function Content() {
                   Join Random Room
                 </PrimaryButton>
               </div>
-              <div className={styles.codeRoom}>
-                <input placeholder='Enter Code' />
+              <form
+                className={styles.codeRoom}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (codeInput.replaceAll(" ", "").length > 0) {
+                    router.push(`/${codeInput.replaceAll(" ", "")}`);
+                  }
+                }}
+              >
+                <input
+                  placeholder="Enter Code"
+                  value={codeInput}
+                  onChange={(e) => setCodeInput(e.target.value)}
+                />
                 <PrimaryButton>Join</PrimaryButton>
-              </div>
+              </form>
             </div>
             <div className={styles.friendsTitle}>Friends</div>
             <div className={styles.friends}>
@@ -141,7 +160,7 @@ export default function Content() {
                   <button
                     className={styles.roomJoin}
                     onClick={() => {
-                      console.log('join room');
+                      console.log("join room");
                       router.push(`/${game.code}`);
                     }}
                   >
@@ -171,26 +190,47 @@ export default function Content() {
               <div className={styles.createSetting}>
                 <div className={styles.createSubtitle}>Visibility</div>
                 <div className={styles.visibility}>
-                  <span
+                  <div
+                    className={cx(styles.visibility__option, {
+                      [styles["visibility__option--selected"]]:
+                        visibility === "public",
+                    })}
+                    onClick={() => setVisibility("public")}
+                  >
+                    <PublicIcon />
+                    <div style={{ width: "5px" }} /> Public
+                  </div>
+                  <div
+                    className={cx(styles.visibility__option, {
+                      [styles["visibility__option--selected"]]:
+                        visibility === "private",
+                    })}
+                    onClick={() => setVisibility("private")}
+                  >
+                    <PrivateIcon />
+                    <div style={{ width: "5px" }} />
+                    Private
+                  </div>
+                  {/* <span
                     className={
-                      visibility === 'public'
+                      visibility === "public"
                         ? styles.selected
                         : styles.deselected
                     }
-                    onClick={() => setVisibility('public')}
+                    onClick={() => setVisibility("public")}
                   >
                     Public
                   </span>
                   <span
                     className={
-                      visibility === 'private'
+                      visibility === "private"
                         ? styles.selected
                         : styles.deselected
                     }
-                    onClick={() => setVisibility('private')}
+                    onClick={() => setVisibility("private")}
                   >
                     Private
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div className={styles.createSetting}>
@@ -198,17 +238,17 @@ export default function Content() {
                   No. of Players - {playerNumber}
                 </div>
                 <Slider
-                  axis='x'
+                  axis="x"
                   xstep={0.1}
                   xmin={3}
                   xmax={8}
                   x={playerNumber}
                   styles={{
                     active: {
-                      background: '#e93131',
+                      background: "#e93131",
                     },
                   }}
-                  style={{ width: '100%', marginTop: '16px' }}
+                  style={{ width: "100%", marginTop: "16px" }}
                   onChange={({ x }) =>
                     setPlayerNumber(parseFloat(x.toFixed(0)))
                   }
@@ -225,17 +265,17 @@ export default function Content() {
                     <div
                       className={styles.politics}
                       style={
-                        categories.includes('Politics')
+                        categories.includes("Politics")
                           ? {}
-                          : { background: '#0b50b826', color: '#0b50b8' }
+                          : { background: "#0b50b826", color: "#0b50b8" }
                       }
                       onClick={() => {
-                        if (categories.includes('Politics')) {
+                        if (categories.includes("Politics")) {
                           setCategories(
-                            categories.filter((cat) => cat !== 'Politics')
+                            categories.filter((cat) => cat !== "Politics")
                           );
                         } else {
-                          setCategories([...categories, 'Politics']);
+                          setCategories([...categories, "Politics"]);
                         }
                       }}
                     >
@@ -244,17 +284,17 @@ export default function Content() {
                     <div
                       className={styles.sports}
                       style={
-                        categories.includes('Sports')
+                        categories.includes("Sports")
                           ? {}
-                          : { background: '#0bb85026', color: '#0bb850' }
+                          : { background: "#0bb85026", color: "#0bb850" }
                       }
                       onClick={() => {
-                        if (categories.includes('Sports')) {
+                        if (categories.includes("Sports")) {
                           setCategories(
-                            categories.filter((cat) => cat !== 'Sports')
+                            categories.filter((cat) => cat !== "Sports")
                           );
                         } else {
-                          setCategories([...categories, 'Sports']);
+                          setCategories([...categories, "Sports"]);
                         }
                       }}
                     >
@@ -263,17 +303,17 @@ export default function Content() {
                     <div
                       className={styles.celebs}
                       style={
-                        categories.includes('Celebs')
+                        categories.includes("Celebs")
                           ? {}
-                          : { background: '#ee2a2a26', color: '#ee2a2a' }
+                          : { background: "#ee2a2a26", color: "#ee2a2a" }
                       }
                       onClick={() => {
-                        if (categories.includes('Celebs')) {
+                        if (categories.includes("Celebs")) {
                           setCategories(
-                            categories.filter((cat) => cat !== 'Celebs')
+                            categories.filter((cat) => cat !== "Celebs")
                           );
                         } else {
-                          setCategories([...categories, 'Celebs']);
+                          setCategories([...categories, "Celebs"]);
                         }
                       }}
                     >
@@ -284,17 +324,17 @@ export default function Content() {
                     <div
                       className={styles.companies}
                       style={
-                        categories.includes('Companies')
+                        categories.includes("Companies")
                           ? {}
-                          : { background: '#ed981926', color: '#ed9819' }
+                          : { background: "#ed981926", color: "#ed9819" }
                       }
                       onClick={() => {
-                        if (categories.includes('Companies')) {
+                        if (categories.includes("Companies")) {
                           setCategories(
-                            categories.filter((cat) => cat !== 'Companies')
+                            categories.filter((cat) => cat !== "Companies")
                           );
                         } else {
-                          setCategories([...categories, 'Companies']);
+                          setCategories([...categories, "Companies"]);
                         }
                       }}
                     >
@@ -303,17 +343,17 @@ export default function Content() {
                     <div
                       className={styles.chats}
                       style={
-                        categories.includes('Chats')
+                        categories.includes("Chats")
                           ? {}
-                          : { background: '#d51de526', color: '#d51de5' }
+                          : { background: "#d51de526", color: "#d51de5" }
                       }
                       onClick={() => {
-                        if (categories.includes('Chats')) {
+                        if (categories.includes("Chats")) {
                           setCategories(
-                            categories.filter((cat) => cat !== 'Chats')
+                            categories.filter((cat) => cat !== "Chats")
                           );
                         } else {
-                          setCategories([...categories, 'Chats']);
+                          setCategories([...categories, "Chats"]);
                         }
                       }}
                     >
@@ -322,17 +362,17 @@ export default function Content() {
                     <div
                       className={styles.random}
                       style={
-                        categories.includes('Random')
+                        categories.includes("Random")
                           ? {}
-                          : { background: '#f412c326', color: '#f412c3' }
+                          : { background: "#f412c326", color: "#f412c3" }
                       }
                       onClick={() => {
-                        if (categories.includes('Random')) {
+                        if (categories.includes("Random")) {
                           setCategories(
-                            categories.filter((cat) => cat !== 'Random')
+                            categories.filter((cat) => cat !== "Random")
                           );
                         } else {
-                          setCategories([...categories, 'Random']);
+                          setCategories([...categories, "Random"]);
                         }
                       }}
                     >
@@ -345,12 +385,12 @@ export default function Content() {
             <PrimaryButton
               onClick={() => {
                 const payload = {
-                  private: visibility === 'private',
+                  private: visibility === "private",
                   maxPlayers: playerNumber,
                   categories: categories,
                 };
 
-                socket.emit('newgame', payload);
+                socket.emit("newgame", payload);
                 setPopupState(false);
               }}
             >

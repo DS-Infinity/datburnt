@@ -266,7 +266,7 @@ module.exports = (io) => {
         newPlayers.splice(i, 1);
         game.players = newPlayers;
         updateGame(code, game);
-        
+
         io.to(playerToRemove.socketId).emit("game-details", {
           success: false,
           message: "You have been removed from this game!",

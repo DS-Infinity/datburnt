@@ -37,6 +37,7 @@ module.exports = (io) => {
 
   io.on('connection', (socket) => {
     console.log('New Connection: ', socket.id);
+
     hop.channels.setState(channelId, (s) => ({
       ...s,
       name: 'My Channel',
@@ -45,6 +46,9 @@ module.exports = (io) => {
     socket.emit('games', { games: sortGames(state.games) });
 
     socket.on('disconnect', () => {
+      hop.channels.getStats(channelId).then((stats) => {
+        console.log(stats);
+      });
       hop.channels.setState(channelId, (s) => ({
         ...s,
         name: 'My Channel',

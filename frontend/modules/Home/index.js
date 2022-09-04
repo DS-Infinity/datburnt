@@ -20,6 +20,7 @@ const channelId = 'online_users';
 
 import PublicIcon from '../../public/icons/public.svg';
 import PrivateIcon from '../../public/icons/private.svg';
+import Image from 'next/image';
 // import 'react-input-range/lib/css/index.css';
 
 export default function Content() {
@@ -75,9 +76,12 @@ export default function Content() {
   useEffect(() => {
     user.friends.forEach((element) => {
       axios.post('/auth/getUserFromID', { userId: element }).then((res) => {
-        setFriends((f) => [res.data.user]);
+        setFriends((f) => [...f, res.data.user]);
+        console.log(res.data.user);
       });
     });
+
+    console.log('friends', user.friends);
 
     console.log('useEffect run ');
     if (user && !socket) {
@@ -94,6 +98,12 @@ export default function Content() {
 
     return socket?.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (state) {
+      console.log(state.users);
+    }
+  }, [state]);
 
   useEffect(() => {
     if (socket) {
@@ -170,10 +180,21 @@ export default function Content() {
                   setPopupState2(true);
                 }}
               >
-                add frand
+                <div className={styles.add}>+</div>
+                <div className={styles.friendName}>Add New</div>
               </div>
               {friends.map((friend) => (
-                <div className={styles.friend}>{friend?.name}</div>
+                <div className={styles.friend}>
+                  <div className={styles.avatarContainer}>
+                    <Image
+                      className={styles.avatar}
+                      src={friend?.avatar}
+                      height={80}
+                      width={80}
+                    />
+                  </div>
+                  <div className={styles.friendName}>{friend?.name}</div>
+                </div>
               ))}
             </div>
             <div className={styles.publicTitle}>Public Rooms</div>
@@ -451,7 +472,7 @@ export default function Content() {
                             friendId: res.data.user._id.toString(),
                           })
                           .then((res) => {
-                            console.log(`results lmao ${res.data}`);
+                            console.log(`results lmao ${res.data.message}`);
                           });
                       }
                     });

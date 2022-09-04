@@ -1,11 +1,33 @@
-import Image from "next/image";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/userAtom";
-import styles from "./waiting.module.scss";
-import PrimaryButton from "../../components/Button/Primary";
+import Image from 'next/image';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userAtom';
+import styles from './waiting.module.scss';
+import PrimaryButton from '../../components/Button/Primary';
+import { useEffect, useState } from 'react';
 
 const WaitingRoom = ({ details, players, onStart }) => {
+  function arrayMove(arr, fromIndex, toIndex) {
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+  }
+
   const [user, setUser] = useRecoilState(userState);
+  const [playerList, setPlayerList] = useState(players);
+  useEffect(() => {
+    setPlayerList(players);
+    // const me = players.filter((player) => {
+    //   return player.id === user._id.toString();
+    // })[0];
+    const index = playerList.findIndex(
+      (player) => player.id === user._id.toString()
+    );
+    setPlayerList((playerList) => {
+      arrayMove(playerList, index, 0);
+      return playerList;
+    });
+    console.log(players);
+  }, [players]);
 
   return (
     <div className={styles.container}>
@@ -30,7 +52,7 @@ const WaitingRoom = ({ details, players, onStart }) => {
             Maximum Players: <span>{details.maxPlayers}</span>
           </div>
           <div className={styles.visibility}>
-            {details.private ? "⠀⠀⠀⠀⠀⠀Private" : `⠀⠀⠀⠀⠀⠀⠀Public`}
+            {details.private ? '⠀⠀⠀⠀⠀⠀Private' : `⠀⠀⠀⠀⠀⠀⠀Public`}
           </div>
         </div>
         <div className={styles.cardBottom}>
@@ -41,19 +63,19 @@ const WaitingRoom = ({ details, players, onStart }) => {
                 <div
                   key={category}
                   className={`${styles.category} ${
-                    category === "Politics"
+                    category === 'Politics'
                       ? styles.politics
-                      : category === "Sports"
+                      : category === 'Sports'
                       ? styles.sports
-                      : category === "Celebs"
+                      : category === 'Celebs'
                       ? styles.celebs
-                      : category === "Companies"
+                      : category === 'Companies'
                       ? styles.companies
-                      : category === "Chats"
+                      : category === 'Chats'
                       ? styles.chats
-                      : category === "Random"
+                      : category === 'Random'
                       ? styles.random
-                      : ""
+                      : ''
                   }`}
                 >
                   {category}
@@ -64,7 +86,7 @@ const WaitingRoom = ({ details, players, onStart }) => {
         </div>
       </div>
       <div className={styles.players}>
-        {players.map((player) => {
+        {playerList.map((player) => {
           return (
             <div className={styles.playerCard} key={player.id}>
               <div className={styles.playerImageContainer}>
@@ -88,12 +110,12 @@ const WaitingRoom = ({ details, players, onStart }) => {
           {players.length < 3 && (
             <div className={styles.playersNeeded}>
               You need {3 - players.length} player
-              {3 - players.length == 1 ? "" : "s"} more to start the game
+              {3 - players.length == 1 ? '' : 's'} more to start the game
             </div>
           )}
           {details.owner === user._id && (
             <PrimaryButton
-              className={styles["start-button"]}
+              className={styles['start-button']}
               onClick={onStart}
               disabled={players.length < 3}
             >

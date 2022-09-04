@@ -1,12 +1,12 @@
-const makeid = require('../utils/makeid');
-const state = require('../state');
-const { parse } = require('cookie');
-const jwt = require('jsonwebtoken');
+const makeid = require("../utils/makeid");
+const state = require("../state");
+const { parse } = require("cookie");
+const jwt = require("jsonwebtoken");
 // import { hop } from "../utils/hop";
-const hop = require('../utils/hop');
-const channelId = 'online_users';
+const hop = require("../utils/hop");
+const channelId = "online_users";
 
-const User = require('../models/User');
+const User = require("../models/User");
 
 function sortGames(games) {
   const g = [];
@@ -35,15 +35,13 @@ module.exports = (io) => {
     }
   });
 
-  io.on('connection', (socket) => {
-    console.log('New Connection: ', socket.id);
-
+  io.on("connection", (socket) => {
     hop.channels.setState(channelId, (s) => ({
       ...s,
-      name: 'My Channel',
+      name: "My Channel",
       users: [...s.users, socket.user],
     }));
-    socket.emit('games', { games: sortGames(state.games) });
+    socket.emit("games", { games: sortGames(state.games) });
 
     socket.on('disconnect', () => {
       hop.channels.getStats(channelId).then((stats) => {
@@ -51,17 +49,16 @@ module.exports = (io) => {
       });
       hop.channels.setState(channelId, (s) => ({
         ...s,
-        name: 'My Channel',
+        name: "My Channel",
         users: s.users.filter(
           (u) => u._id.toString() !== socket.user._id.toString()
         ),
       }));
-      console.log('Disconnection: ', socket.id);
       socket.removeAllListeners();
       socket.disconnect();
     });
 
-    socket.on('newgame', (payload) => {
+    socket.on("newgame", (payload) => {
       const code = makeid(6);
       const newGame = {
         ...payload,
@@ -75,12 +72,13 @@ module.exports = (io) => {
         prevQs: [],
       };
 
-      console.log(newGame);
-
       state.setGames([...state.games, newGame]);
-      io.emit('games', { games: sortGames(state.games) });
-      io.to(socket.id).emit('redirect', code);
+      io.emit("games", { games: sortGames(state.games) });
+      io.to(socket.id).emit("redirect", code);
       socket.disconnect();
+
+      console.log(`Creating new game ${code}`);
+      console.log("No. of Rooms:", state.games.length);
     });
   });
 };

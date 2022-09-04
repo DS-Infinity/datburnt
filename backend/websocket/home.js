@@ -43,7 +43,10 @@ module.exports = (io) => {
     }));
     socket.emit("games", { games: sortGames(state.games) });
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
+      hop.channels.getStats(channelId).then((stats) => {
+        console.log(stats);
+      });
       hop.channels.setState(channelId, (s) => ({
         ...s,
         name: "My Channel",

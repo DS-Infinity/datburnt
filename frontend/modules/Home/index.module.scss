@@ -193,8 +193,74 @@
 }
 
 .friend {
-  height: 100px;
+  height: 160px;
+  // background: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+  justify-content: flex-start;
+  width: 120px;
+  margin-left: 16px;
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 6px solid #24eb5c;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  margin-bottom: 16px;
+}
+
+.addFriend {
+  height: 160px;
+  // background: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+  justify-content: flex-start;
+  width: 120px;
+}
+
+.add {
+  border-radius: 50%;
+  border: 6px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: var(--primary);
+  height: 80px;
+  width: 80px;
   background: white;
+}
+
+.friendName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #4e4e4e;
+  margin: 0;
+  margin-top: 8px;
+}
+
+.friends {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16px;
 }
 
 .publicRooms {

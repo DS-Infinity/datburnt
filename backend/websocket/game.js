@@ -81,6 +81,16 @@ module.exports = (io) => {
             updateGame(code, game);
             state.setSockets({ ...state.sockets, [socket.id]: null });
             io.in(code).emit("players", game.players);
+
+            if (game.players.length <= 0) {
+              const gameIndex = state.games.findIndex((g) => g.code === code);
+              const gs = [...state.games];
+              gs.splice(gameIndex, 1);
+              state.setGames(gs);
+              state.setSockets({ ...state.sockets, [socket.id]: null });
+              io.in(code).emit("end");
+              console.log("Deleting Room:", code);
+            }
           }
         }
       }

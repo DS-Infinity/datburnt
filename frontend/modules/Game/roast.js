@@ -57,6 +57,7 @@ const RoastForm = ({ round, details, submitRoast }) => {
 
   const [playOof, { stop: stopOof }] = useSound("/sounds/oof.mp3");
   const [playTicking, { stop: stopTicking }] = useSound("/sounds/ticking.mp3");
+  const [playBeep] = useSound("/sounds/beep.mp3");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -114,6 +115,7 @@ const RoastForm = ({ round, details, submitRoast }) => {
             onSubmit={(e) => {
               e.preventDefault();
               if (myRoast.length > 0) {
+                playBeep();
                 submitRoast(myRoast);
                 stopTicking();
                 setSubmitted(true);
@@ -128,6 +130,7 @@ const RoastForm = ({ round, details, submitRoast }) => {
             <PrimaryButton
               onClick={() => {
                 if (myRoast.length > 0) {
+                  playBeep();
                   submitRoast(myRoast);
                   stopTicking();
                   setSubmitted(true);

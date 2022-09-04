@@ -1,0 +1,38 @@
+.main {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    color: #4e4e4e;
+    font-weight: 800;
+    font-size: 36px;
+  }
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 80px;
+  background: white;
+  padding: 20px 0px;
+}
+
+.button {
+  margin-right: 2vw;
+}
+
+.position {
+  font-weight: 600;
+  color: #5e5e5e;
+  font-size: 20px;
+  margin-left: 3vw;
+}

@@ -201,7 +201,8 @@
 .room {
   display: flex;
   justify-content: space-between;
-  width: 16vw;
+  max-width: 20vw;
+  min-width: 16vw;
   padding: 24px;
   background: white;
   border-radius: 14px;
@@ -211,7 +212,8 @@
 
 .roomInfo {
   margin-top: 4px;
-  margin-right: 64px;
+  margin-right: 24px;
+  padding-right: 32px;
   margin-bottom: 24px;
 }
 

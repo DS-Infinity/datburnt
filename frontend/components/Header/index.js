@@ -1,7 +1,7 @@
 import styles from './shared/index.module.scss';
 import Image from 'next/image';
 
-import Logo from '../../public/icons/logo.svg';
+import Logo from '../../public/icons/logo.png';
 import PrimaryButton from '../Button/Primary';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -19,7 +19,7 @@ export default function Header(props) {
   return (
     <div className={styles.navbar}>
       <div className={styles.logo}>
-        <Image src={Logo} />
+        <Image src={Logo} height={50} width={50}/>
         <h1
           style={{ color: `${props.type == 'light' ? '#ffffff' : ''}` }}
           className={styles.logo__name}

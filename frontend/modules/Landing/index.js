@@ -4,7 +4,7 @@ import { useState } from 'react';
 import PrimaryButton from '../../components/Button/Primary';
 import TextButton from '../../components/Button/Text';
 import styles from './index.module.scss';
-import Barbeque from '../../public/icons/barbeque.svg';
+import Barbeque from '../../public/icons/barbeque.png';
 // import Navbar from '../../components/Navbar';
 
 export default function Content() {
@@ -29,7 +29,7 @@ export default function Content() {
           </button>
         </div>
         <div className={styles.landing__image}>
-          <Image src={Barbeque} />
+          <Image src={Barbeque} height={500} width={500} />
         </div>
       </div>
     </div>

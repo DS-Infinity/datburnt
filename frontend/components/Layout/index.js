@@ -15,7 +15,7 @@ export default function Layout({
     <>
       <Head>
         <title>{page.title + ` • datburnttt`}</title>
-        <title>datburnt - keep some ice handy</title>
+        <link rel="shortcut icon" href="/icons/logo.png" />
         <meta name="title" content="datburnt - keep some ice handy" />
         <meta
           name="description"

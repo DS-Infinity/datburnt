@@ -10,6 +10,7 @@ const Game = () => {
           title: "Game",
         }}
         showNav={true}
+        isGame={true}
       >
         <Content />
       </Layout>

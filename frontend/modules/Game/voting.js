@@ -74,7 +74,9 @@ const Voting = ({ details, voteCandidates, submitVote }) => {
         </div>
         <div className={styles.candidates}>
           {candidates.length < 2 ? (
-            <div>Not enough people submitted a roast :(</div>
+            <div className={styles.notEnough}>
+              Not enough people submitted a roast :(
+            </div>
           ) : (
             candidates.map((candidate) => {
               return (

@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import classNames from 'classnames';
 import { hop } from '@onehop/client';
 import { useChannelMessage, useReadChannelState } from '@onehop/react';
+import axios from '../../utils/axios';
 const cx = classNames.bind(styles);
 
 const channelId = 'online_users';
@@ -45,6 +46,7 @@ export default function Content() {
   const [popupState, setPopupState] = useState(false);
   const [popupState2, setPopupState2] = useState(false);
   const [friendUsername, setFriendUsername] = useState('');
+  const [friends, setFriends] = useState([]);
 
   const [games, setGames] = useState([]);
 
@@ -71,6 +73,12 @@ export default function Content() {
   // }, []);
 
   useEffect(() => {
+    user.friends.forEach((element) => {
+      axios.post('/auth/getUserFromID', { userId: element }).then((res) => {
+        setFriends((f) => [...f, res.data.user]);
+      });
+    });
+
     console.log('useEffect run ');
     if (user && !socket) {
       const sock = io(`${process.env.NEXT_PUBLIC_API_URL}/home`, {
@@ -164,6 +172,9 @@ export default function Content() {
               >
                 add frand
               </div>
+              {friends.map((friend) => (
+                <div className={styles.friend}>{friend?.name}</div>
+              ))}
             </div>
             <div className={styles.publicTitle}>Public Rooms</div>
             <div className={styles.publicRooms}>
@@ -426,10 +437,35 @@ export default function Content() {
               />
               <PrimaryButton
                 onClick={() => {
-                  hop.channels.setState(channelId, (s) => ({
-                    ...s,
-                    name: 'My Channel',
-                  }));
+                  axios
+                    .post('/auth/getUser', {
+                      username: friendUsername,
+                    })
+                    .then((res) => {
+                      if (res.data.success) {
+                        console.log(res.data.user);
+                        axios
+                          .post('/auth/add-frand', {
+                            userId: user._id.toString(),
+                            friendId: res.data.user._id.toString(),
+                          })
+                          .then((res) => {
+                            console.log(`results lmao ${res.data}`);
+                          });
+                      }
+                    });
+                  // axios
+                  //   .post('/auth/add-frand', {
+                  //     username: friendUsername,
+                  //   })
+                  //   .then((res) => {
+                  //     console.log(res.data);
+                  //     setFriendUsername('');
+                  //   });
+                  // hop.channels.setState(channelId, (s) => ({
+                  //   ...s,
+                  //   name: 'My Channel',
+                  // }));
                   // socket.emit('addfriend', friendUsername);
                   // setPopupState2(false);
                 }}

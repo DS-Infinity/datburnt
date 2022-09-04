@@ -161,4 +161,22 @@ router.post('/add-frand', auth, async (req, res) => {
   }
 });
 
+router.post('/getUser', auth, async (req, res) => {
+  const username = req.body.username;
+
+  const user = await User.findOne({ name: username }).select('-password');
+  if (!user) return res.send({ succes: false, message: 'Invalid Token' });
+
+  res.send({ success: true, user });
+});
+
+router.post('/getUserFromID', auth, async (req, res) => {
+  const userId = req.body.userId;
+
+  const user = await User.findOne({ _id: userId }).select('-password');
+  if (!user) return res.send({ succes: false, message: 'Invalid Token' });
+
+  res.send({ success: true, user });
+});
+
 module.exports = router;

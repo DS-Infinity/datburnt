@@ -52,6 +52,62 @@ const images = [
     url: "https://cdn.discordapp.com/attachments/896998944935120907/1015911668057903124/unknown.png",
     category: "Sports",
   },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016290324919877652/unknown.png",
+    category: "Celebs",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016290500615090206/unknown.png",
+    category: "Celebs",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016290677165932564/unknown.png",
+    category: "Celebs",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016290893520719932/unknown.png",
+    category: "Celebs",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016291675875844137/unknown.png",
+    category: "Celebs",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016291733262303323/unknown.png",
+    category: "Celebs",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016292558864916550/unknown.png",
+    category: "Companies",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016292780642943046/unknown.png",
+    category: "Companies",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016293192301297764/unknown.png",
+    category: "Companies",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016293399348924516/unknown.png",
+    category: "Companies",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016293843399884830/unknown.png",
+    category: "Companies",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016293883832979496/unknown.png",
+    category: "Random",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016294272384892948/unknown.png",
+    category: "Random",
+  },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016294352135409716/unknown.png",
+    category: "Companies",
+  },
 ];
 
 function getRound(categories, previousRounds) {

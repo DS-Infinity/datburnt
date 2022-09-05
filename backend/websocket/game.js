@@ -108,6 +108,10 @@ const images = [
     url: "https://media.discordapp.net/attachments/772689583019393084/1016294352135409716/unknown.png",
     category: "Companies",
   },
+  {
+    url: "https://media.discordapp.net/attachments/772689583019393084/1016296668334919760/unknown.png",
+    category: "Celebs",
+  },
 ];
 
 function getRound(categories, previousRounds) {

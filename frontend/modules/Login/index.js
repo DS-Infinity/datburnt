@@ -1,14 +1,14 @@
-import styles from './index.module.scss';
-import { useState } from 'react';
-import axios from '../../utils/axios';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userAtom';
-import PrimaryButton from '../../components/Button/Primary';
+import styles from "./index.module.scss";
+import { useState } from "react";
+import axios from "../../utils/axios";
+import { useRecoilState } from "recoil";
+import { userState } from "../../utils/userAtom";
+import PrimaryButton from "../../components/Button/Primary";
 
 export default function Content() {
-  const [userEmail, setUserEmail] = useState('');
-  const [error, setError] = useState('');
-  const [userPass, setUserPass] = useState('');
+  const [userEmail, setUserEmail] = useState("");
+  const [error, setError] = useState("");
+  const [userPass, setUserPass] = useState("");
   const [user, setUser] = useRecoilState(userState);
   const [loggingIn, setLoggingIn] = useState(false);
 
@@ -25,7 +25,7 @@ export default function Content() {
             onChange={(e) => {
               setUserEmail(e.target.value);
             }}
-            type='email'
+            type="email"
           />
           <div className={styles.login__form__section}>Password</div>
           <input
@@ -34,22 +34,22 @@ export default function Content() {
             onChange={(e) => {
               setUserPass(e.target.value);
             }}
-            type='password'
+            type="password"
           />
           <PrimaryButton
             className={styles.login__form__button}
             onClick={async () => {
               setLoggingIn(true);
-              const { data } = await axios.post('/auth/login', {
+              const { data } = await axios.post("/auth/login", {
                 email: userEmail,
                 password: userPass,
               });
 
-              console.log(data);
+              // (data);
 
               if (data.success) {
                 setUser(data.user);
-                return (window.location.href = '/home');
+                return (window.location.href = "/home");
               } else {
                 setError(data.message);
                 setLoggingIn(false);

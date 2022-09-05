@@ -1,15 +1,15 @@
-import styles from './index.module.scss';
-import { useState } from 'react';
-import axios from '../../utils/axios';
-import { userState } from '../../utils/userAtom';
-import { useRecoilState } from 'recoil';
-import PrimaryButton from '../../components/Button/Primary';
+import styles from "./index.module.scss";
+import { useState } from "react";
+import axios from "../../utils/axios";
+import { userState } from "../../utils/userAtom";
+import { useRecoilState } from "recoil";
+import PrimaryButton from "../../components/Button/Primary";
 
 export default function Content() {
-  const [userName, setUserName] = useState('');
-  const [userPass, setUserPass] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [error, setError] = useState('');
+  const [userName, setUserName] = useState("");
+  const [userPass, setUserPass] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [error, setError] = useState("");
   const [user, setUser] = useRecoilState(userState);
 
   const [registering, setRegistering] = useState(false);
@@ -39,7 +39,7 @@ export default function Content() {
             onChange={(e) => {
               setUserName(e.target.value);
             }}
-            type='text'
+            type="text"
           />
           <div className={styles.register__form__section}>Email</div>
           <input
@@ -48,7 +48,7 @@ export default function Content() {
             onChange={(e) => {
               setUserEmail(e.target.value);
             }}
-            type='email'
+            type="email"
           />
           <div className={styles.register__form__section}>Password</div>
           <input
@@ -57,25 +57,25 @@ export default function Content() {
             onChange={(e) => {
               setUserPass(e.target.value);
             }}
-            type='password'
+            type="password"
           />
           <PrimaryButton
             className={styles.register__form__button}
             onClick={async () => {
-              console.log('clicked');
+              // // ('clicked');
               setRegistering(true);
-              const { data } = await axios.post('/auth/register', {
+              const { data } = await axios.post("/auth/register", {
                 username: userName,
                 avatar: avatar,
                 email: userEmail,
                 password: userPass,
               });
 
-              console.log(data);
+              // // (data);
 
               if (data.success) {
                 setUser(data.user);
-                return (window.location.href = '/home');
+                return (window.location.href = "/home");
               } else {
                 setError(data.message);
                 setRegistering(false);

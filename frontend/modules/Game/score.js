@@ -106,7 +106,7 @@ const Score = ({ scores, owner, nextRound, currentRound }) => {
           {user._id === owner ? (
             <PrimaryButton
               onClick={() => {
-                console.log("next round");
+                // ("next round");
                 nextRound();
               }}
             >

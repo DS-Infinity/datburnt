@@ -14,8 +14,8 @@ const Roast = ({ round, details, submitRoast }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (countdown < 0) {
-        clearInterval(interval);
         stop();
+        clearInterval(interval);
       } else {
         setCountdown(countdown - 1);
         clearInterval(interval);

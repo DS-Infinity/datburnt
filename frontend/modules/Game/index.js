@@ -31,7 +31,7 @@ const GameContent = () => {
 
   useEffect(() => {
     if (user && router.query.code) {
-      console.log(router.query.code);
+      // (router.query.code);
       socket = io(`${process.env.NEXT_PUBLIC_API_URL}/game`, {
         withCredentials: true,
       });
@@ -46,17 +46,17 @@ const GameContent = () => {
           setErrorMsg(null);
           setPlayers(payload.game.players);
           setDetails(payload.game);
-          console.log(payload);
+          // (payload);
         }
       });
 
       socket.on("players", (players) => {
-        console.log(players);
+        // (players);
         setPlayers(players);
       });
 
       socket.on("next-round", (data) => {
-        console.log("next round");
+        // ("next round");
         setCurrentRound(data.round);
         setRoundDetails(data.details);
         setVoteCandidates([]);
@@ -106,7 +106,7 @@ const GameContent = () => {
   }, [router.query.code]);
 
   useEffect(() => {
-    console.log(players);
+    // (players);
   }, [players]);
   return (
     <>
